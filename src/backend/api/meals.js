@@ -48,7 +48,7 @@ function checkValidData(data) {
     return validData;
   } catch (error) {
     console.log(error);
-    response.status(5000).json({
+    response.status(500).json({
       status: 'failed',
       message: `internal server error in checkValidData ${error}`,
     });
@@ -184,7 +184,7 @@ router.post('/', async (request, response) => {
     });
   } catch (error) {
     console.log(error);
-    response.status(5000).json({
+    response.status(500).json({
       status: 'failed',
       message: `internal server error in POST api/meals/ ${error}`,
     });
@@ -207,7 +207,7 @@ router.get('/:id', async (request, response) => {
     response.json(mealByID);
   } catch (error) {
     console.log(error);
-    response.status(5000).json({
+    response.status(500).json({
       status: 'failed',
       message: `internal server error  GET api/meals/:id ${error}`,
     });
@@ -250,7 +250,7 @@ router.put('/:id', async (request, response) => {
     });
   } catch (error) {
     console.log(error);
-    response.status(5000).json({
+    response.status(500).json({
       status: 'failed',
       message: `internal server error  PUT api/meals/:id ${error}`,
     });
@@ -279,7 +279,7 @@ router.delete('/:id', async (request, response) => {
     });
   } catch (error) {
     console.log(error);
-    response.status(5000).json({
+    response.status(500).json({
       status: 'failed',
       message: `internal server error in Deletes meal by id ${error}`,
     });

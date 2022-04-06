@@ -32,7 +32,7 @@ router.get('/', async (request, response) => {
     response.json(allReviews);
   } catch (error) {
     console.log(error);
-    response.status(5000).json({
+    response.status(500).json({
       status: 'failed',
       message: `internal server error in get all reviews api/reviews/ ${error}`,
     });
@@ -78,7 +78,7 @@ router.get('/:id', async (request, response) => {
     response.send(reviewByID);
   } catch (error) {
     console.log(error);
-    response.status(5000).json({
+    response.status(500).json({
       status: 'failed',
       message: `internal server error in get  reviews by id api/reviews/ ${error}`,
     });
@@ -121,7 +121,7 @@ router.put('/:id', async (request, response) => {
     });
   } catch (error) {
     console.log(error);
-    response.status(5000).json({
+    response.status(500).json({
       status: 'failed',
       message: `internal server error in put reviews by id api/reviews/ ${error}`,
     });
@@ -152,7 +152,7 @@ router.delete('/:id', async (request, response) => {
     });
   } catch (error) {
     console.log(error);
-    response.status(5000).json({
+    response.status(500).json({
       status: 'failed',
       message: `internal server error in delete reviews by id api/reviews/ ${error}`,
     });
