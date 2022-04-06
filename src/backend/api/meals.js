@@ -3,193 +3,267 @@ const { sum, limit } = require('../database');
 const router = express.Router();
 const knex = require('../database');
 
-//Returns  meals based on query
-//GET api/meals/
-router.get('/', async(request, response) => {
-    try {
-        let mealsArray = await knex('meal');
-        let reservationsArray = await knex('reservation');
+// to validate data received from user to post/Put to db
 
-        //limit and maxPrice
-        if ('limit' in request.query && 'maxPrice' in request.query) {
-            const maxPriceMealLimit = mealsArray
-                .filter((meal) => meal.price < Number(request.query.maxPrice))
-                .slice(0, Number(request.query.limit));
-            if (
-                isNaN(Number(request.query.limit)) ||
-                isNaN(Number(request.query.maxPrice))
-            ) {
-                return response.send('provde a number');
-            } else if (0 < maxPriceMealLimit.length) {
-                return response.json(maxPriceMealLimit);
-            } else {
-                response.send('no meal matched');
-            }
-        }
+const mealColumns = new Set([
+  'title',
+  'description',
+  'location',
+  'when',
+  'max_reservations',
+  'price',
+  'created_date',
+]);
 
-        // Get meals that has a price smaller than maxPrice
-        // api/meals?maxPrice=90
-        if ('maxPrice' in request.query) {
-            if (isNaN(Number(request.query.maxPrice))) {
-                return response.send('provide a number');
-            }
-
-            const maxPrice = mealsArray.filter(
-                (meal) => meal.price < Number(request.query.maxPrice),
-            );
-
-            if (maxPrice.length > 0) {
-                return response.send(maxPrice);
-            } else {
-                return response.send('no cheap meal found');
-            }
-        }
-
-        // api/meals?title=Indian%20platter (%20 is a space character)
-        if ('title' in request.query) {
-            const title = mealsArray.filter((meal) =>
-                meal.title.toLowerCase().includes(request.query.title.toLowerCase()),
-            );
-            if (title.length < 1) {
-                return response
-                    .status(404)
-                    .json({ Error: 'No meal found matching title' });
-            }
-            return response.json(title);
-        }
-
-        // Get meals that has been created after the date
-        // api/meals?createdAfter=2019-04-05
-        if ('createdAfter' in request.query) {
-            const createdAfter = mealsArray.filter(
-                (meal) =>
-                new Date(meal.created_date).getTime() >
-                new Date(request.query.createdAfter).getTime(),
-            );
-            if (createdAfter.length === 0) {
-                return response
-                    .status(404)
-                    .json({ Error: 'No meal found created this date' });
-            }
-            return response.json(createdAfter);
-        }
-
-        // Only specific number of meals
-        // api / meals ? limit = 4
-        if ('limit' in request.query) {
-            return response.send(mealsArray.slice(0, Number(request.query.limit)));
-        }
-
-        // method 1
-        // Get meals that still has available reservations
-        // api/meals?availableReservations=true
-        if ('reservationAvailable' in request.query) {
-            let reservationAvailable = mealsArray.map((meal) => {
-                let mealtotalReservation = reservationsArray
-                    .filter((reservation) => meal.id === reservation.meal_id)
-                    .map((newMeal) => newMeal.number_of_guests)
-                    .reduce((one, another) => one + another, 0);
-                return {
-                    ...mealsArray,
-                    'Total Reservation': mealtotalReservation,
-                    'Available Reservation': meal.max_reservations - mealtotalReservation,
-                };
-            });
-
-            return response.json(reservationAvailable);
-        }
-
-        // method 2
-        // Get meals that still has available reservations
-        // api/meals?availableReservations=true
-        if ('availableReservations' in request.query) {
-            const availableReservations = await knex('meal')
-                .join('reservation', 'meal.id', '=', 'reservation.meal_id')
-                .select(
-                    'meal.id',
-                    'reservation.meal_id',
-                    'title',
-                    'when',
-                    'meal.created_date',
-                    'price',
-                    'max_reservations',
-                    knex.raw('SUM(number_of_guests) AS toal_guests'),
-                    knex.raw(
-                        '(max_reservations-SUM(number_of_guests)) AS "Available Reservation"',
-                    ),
-                )
-                .where('max_reservations', '>', 'number_of_guests')
-                .groupBy('meal_id');
-            const available = availableReservations.filter(
-                (availableReservation) =>
-                availableReservation.max_reservations >
-                availableReservation.toal_guests,
-            );
-
-            return response.json(available);
-        }
-
-        response.json(mealsArray);
-    } catch (error) {
-        throw error;
+function checkValidData(data) {
+  try {
+    let validData = {};
+    for (const key in data) {
+      // checking if the mealColumns has the key
+      if (mealColumns.has(key)) {
+        validData[key] = data[key];
+      }
     }
+    if ('limit' in validData) {
+      if (typeof validData.limit !== 'number') {
+        throw new Error();
+      }
+    }
+    if ('price' in validData) {
+      if (typeof validData.price !== 'number') {
+        throw new Error();
+      }
+    }
+    if ('max_reservation' in validData) {
+      if (typeof validData.max_reservation !== 'number') {
+        throw new Error();
+      }
+    }
+    if ('when' in validData) {
+      const parsedDate = new Date(validData.when);
+      if (isNaN(parsedDate)) {
+        throw new Error();
+      }
+    }
+    return validData;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getMeals(query) {
+  let mealsArray = await knex('meal');
+  let reservationsArray = await knex('reservation');
+
+  if ('limit' in query && 'maxPrice' in query) {
+    const maxPriceMealLimit = mealsArray
+      .filter((meal) => meal.price < Number(query.maxPrice))
+      .slice(0, Number(query.limit));
+    if (isNaN(Number(query.limit)) || isNaN(Number(query.maxPrice))) {
+      return 'provde a number';
+    }
+    if (0 < maxPriceMealLimit.length) {
+      return maxPriceMealLimit;
+    } else {
+      return 'no cheap meal matched';
+    }
+  }
+
+  if ('limit' in checkValidQuery) {
+    return mealsArray.slice(0, Number(query.limit));
+  }
+  if ('maxPrice' in query) {
+    if (isNaN(Number(query.maxPrice))) {
+      return 'provide a number';
+    }
+    const maxPrice = mealsArray.filter(
+      (meal) => meal.price < Number(query.maxPrice),
+    );
+    if (maxPrice.length > 0) {
+      return maxPrice;
+    } else {
+      return 'no cheap meal found';
+    }
+  }
+  if ('title' in query) {
+    const title = mealsArray.filter((meal) =>
+      meal.title.toLowerCase().includes(query.title.toLowerCase()),
+    );
+    if (title.length < 1) {
+      return 'No meal found matching title';
+    }
+    return title;
+  }
+  // method1
+  if ('reservationAvailable' in query) {
+    let reservationAvailable = mealsArray.map((meal) => {
+      let mealtotalReservation = reservationsArray
+        .filter((reservation) => meal.id === reservation.meal_id)
+        .map((newMeal) => newMeal.number_of_guests)
+        .reduce((one, another) => one + another, 0);
+      return {
+        ...mealsArray,
+        'Total Reservation': mealtotalReservation,
+        'Available Reservation': meal.max_reservations - mealtotalReservation,
+      };
+    });
+
+    return reservationAvailable;
+  }
+  // method2
+  if ('availableReservations' in query) {
+    const reservationsAvailable = await knex('meal')
+      .join('reservation', 'meal.id', '=', 'reservation.meal_id')
+      .select(
+        'meal.id',
+        'reservation.meal_id',
+        'title',
+        'when',
+        'meal.created_date',
+        'price',
+        'max_reservations',
+        knex.raw('SUM(number_of_guests) AS toal_guests'),
+        knex.raw(
+          '(max_reservations-SUM(number_of_guests)) AS "Available Reservation"',
+        ),
+      )
+      .where('max_reservations', '>', 'number_of_guests')
+      .groupBy('meal_id');
+    const available = reservationsAvailable.filter(
+      (reservation) => reservation.max_reservations > reservation.toal_guests,
+    );
+
+    return available;
+  }
+  if ('createdAfter' in query) {
+    const MealsCreatedAfter = mealsArray.filter(
+      (meal) =>
+        new Date(meal.created_date).getTime() >
+        new Date(query.createdAfter).getTime(),
+    );
+    if (MealsCreatedAfter.length === 0) {
+      return 'No meal found created in this date';
+    }
+    return MealsCreatedAfter;
+  }
+
+  return mealsArray;
+}
+
+// Meals based on query
+//GET api/meals/
+router.get('/', async (request, response) => {
+  const mealsArray = await getMeals(request.query);
+  response.json(mealsArray);
 });
 
 // Adds a new meal
 // POST api/meals/
-router.post('/', async(request, response) => {
-    try {
-        const postMeal = await knex('meal').insert({
-            title: request.body.title,
-            description: request.body.description,
-            location: request.body.location,
-            when: request.body.when,
-            max_reservations: request.body.max_reservations,
-            price: request.body.price,
-            created_date: request.body.created_date,
-        });
-
-        response.json(postMeal);
-    } catch (error) {
-        throw error;
+router.post('/', async (request, response) => {
+  try {
+    const validData = checkValidData(request.body);
+    if (!validData) {
+      return response.status(400).json({
+        status: 'Failed',
+        Error: 'Valid data was not provided.',
+        message: {
+          date: 'Dates format must me (YYYY-MM-DD HH:MM:SS)',
+          price: 'Price and max_reservation must be integers',
+        },
+      });
     }
+    const mealPost = await knex('meal').insert(validData);
+
+    response.status(201).json({
+      status: 'Success',
+      message: `Created ${mealPost}`,
+    });
+  } catch (error) {
+    throw error;
+  }
 });
 
-// Returns meal by id
+// Return meal by id
 // GET api/meals/2
-router.get('/:id', async(request, response) => {
-    try {
-        const getMealByID = await knex('meal').where('id', request.params.id);
-        response.json(getMealByID);
-    } catch (error) {
-        throw error;
+router.get('/:id', async (request, response) => {
+  try {
+    const mealByID = await knex('meal').where('id', request.params.id);
+
+    if (mealByID.length === 0) {
+      return response.status(404).json({
+        status: 'Failed',
+        error: 'Meal not found',
+        message: 'Invalid ID',
+      });
     }
+    response.json(mealByID);
+  } catch (error) {
+    throw error;
+  }
 });
 
-// Updates the meal by id
+// Update meal by id
 // PUT api/meals/2
-router.put('/:id', async(request, response) => {
-    try {
-        const updateMealByID = await knex('meal')
-            .where({ id: request.params.id })
-            .update(request.body);
-        response.json(updateMealByID);
-    } catch (error) {
-        throw error;
+router.put('/:id', async (request, response) => {
+  try {
+    const validData = checkValidData(request.body);
+    const checkedId = await knex('meal').where({ id: request.params.id });
+    // how to validate if price is sent as string???
+    if (Object.keys(validData).length === 0) {
+      return response.status(400).json({
+        status: 'Failed',
+        Error: 'Valid data was not provided.',
+        message: {
+          date: 'Dates format must me (YYYY-MM-DD HH:MM:SS)',
+          price: 'Price and max_reservation must be integers',
+        },
+      });
     }
+
+    if (checkedId.length === 0) {
+      return response.status(404).json({
+        status: 'Failed',
+        error: 'Meal not found',
+        message: 'Invalid ID',
+      });
+    }
+    const mealUpdateByID = await knex('meal')
+      .where({ id: request.params.id })
+      .update(validData);
+
+    response.status(201).json({
+      status: 'Succes',
+      message: 'Updated',
+      updated: mealUpdateByID,
+    });
+  } catch (error) {
+    throw error;
+  }
 });
 
-// Deletes the meal by id
+// Deletes meal by id
 // DELETE api/meals/2
-router.delete('/:id', async(request, response) => {
-    try {
-        const deleteMealByID = await knex('meal')
-            .where({ id: request.params.id })
-            .delete(request.body);
-        response.json(deleteMealByID);
-    } catch (error) {
-        throw error;
+router.delete('/:id', async (request, response) => {
+  try {
+    const checkedId = await knex('meal').where({ id: request.params.id });
+    if (checkedId.length === 0) {
+      return response.status(404).json({
+        status: 'Failed',
+        error: 'Meal not found',
+        message: 'Invalid ID',
+      });
     }
+    const mealDeleteByID = await knex('meal')
+      .where({ id: request.params.id })
+      .delete(request.body);
+    response.json({
+      status: 'Success',
+      message: `Deleted`,
+      deleted: mealDeleteByID,
+    });
+  } catch (error) {
+    throw error;
+  }
 });
 
 module.exports = router;
