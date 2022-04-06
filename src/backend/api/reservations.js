@@ -66,7 +66,11 @@ router.post('/', async (request, response) => {
       message: `Created ${reservationPost}`,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in POST api/reservation/ ${error}`,
+    });
   }
 });
 
@@ -87,7 +91,11 @@ router.get('/:id', async (request, response) => {
     }
     response.json(reservaionByID);
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in POST api/reservation/id ${error}`,
+    });
   }
 });
 
@@ -127,7 +135,11 @@ router.put('/:id', async (request, response) => {
       updated: reservationUpdateById,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in put api/reservation/by id ${error}`,
+    });
   }
 });
 
@@ -155,7 +167,11 @@ router.delete('/:id', async (request, response) => {
       deleted: reservationDeleteByID,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in delete api/meals/ by id ${error}`,
+    });
   }
 });
 

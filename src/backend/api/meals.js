@@ -48,6 +48,10 @@ function checkValidData(data) {
     return validData;
   } catch (error) {
     console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in checkValidData ${error}`,
+    });
   }
 }
 
@@ -69,7 +73,7 @@ async function getMeals(query) {
     }
   }
 
-  if ('limit' in checkValidQuery) {
+  if ('limit' in query) {
     return mealsArray.slice(0, Number(query.limit));
   }
   if ('maxPrice' in query) {
@@ -179,7 +183,11 @@ router.post('/', async (request, response) => {
       message: `Created ${mealPost}`,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in POST api/meals/ ${error}`,
+    });
   }
 });
 
@@ -198,7 +206,11 @@ router.get('/:id', async (request, response) => {
     }
     response.json(mealByID);
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error  GET api/meals/:id ${error}`,
+    });
   }
 });
 
@@ -237,7 +249,11 @@ router.put('/:id', async (request, response) => {
       updated: mealUpdateByID,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error  PUT api/meals/:id ${error}`,
+    });
   }
 });
 
@@ -262,7 +278,11 @@ router.delete('/:id', async (request, response) => {
       deleted: mealDeleteByID,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in Deletes meal by id ${error}`,
+    });
   }
 });
 

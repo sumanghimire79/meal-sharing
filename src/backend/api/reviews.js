@@ -31,7 +31,11 @@ router.get('/', async (request, response) => {
     const allReviews = await knex('review'); //.select('title');
     response.json(allReviews);
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in get all reviews api/reviews/ ${error}`,
+    });
   }
 });
 
@@ -73,7 +77,11 @@ router.get('/:id', async (request, response) => {
 
     response.send(reviewByID);
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in get  reviews by id api/reviews/ ${error}`,
+    });
   }
 });
 
@@ -112,7 +120,11 @@ router.put('/:id', async (request, response) => {
       updated: reviewUpdateByID,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in put reviews by id api/reviews/ ${error}`,
+    });
   }
 });
 
@@ -139,7 +151,11 @@ router.delete('/:id', async (request, response) => {
       deleted: reviewDeleteByID,
     });
   } catch (error) {
-    throw error;
+    console.log(error);
+    response.status(5000).json({
+      status: 'failed',
+      message: `internal server error in delete reviews by id api/reviews/ ${error}`,
+    });
   }
 });
 
