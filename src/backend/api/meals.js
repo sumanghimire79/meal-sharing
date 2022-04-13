@@ -55,110 +55,73 @@ function checkValidData(data) {
   }
 }
 
-async function getMeals(query) {
-  let mealsArray = await knex('meal');
-  let reservationsArray = await knex('reservation');
-
-  if ('limit' in query && 'maxPrice' in query) {
-    const maxPriceMealLimit = mealsArray
-      .filter((meal) => meal.price < Number(query.maxPrice))
-      .slice(0, Number(query.limit));
-    if (isNaN(Number(query.limit)) || isNaN(Number(query.maxPrice))) {
-      return 'provde a number';
-    }
-    if (0 < maxPriceMealLimit.length) {
-      return maxPriceMealLimit;
-    } else {
-      return 'no cheap meal matched';
-    }
-  }
+// Meals based on query
+//GET api/meals/
+router.get('/', async (request, response) => {
+  const query = request.query;
+  let meals = knex('meal');
 
   if ('limit' in query) {
-    return mealsArray.slice(0, Number(query.limit));
-  }
-  if ('maxPrice' in query) {
-    if (isNaN(Number(query.maxPrice))) {
-      return 'provide a number';
+    const limit = Number(query.limit);
+    if (isNaN(query.limit)) {
+      return response.send('Please provide limit a number');
     }
-    const maxPrice = mealsArray.filter(
-      (meal) => meal.price < Number(query.maxPrice),
-    );
-    if (maxPrice.length > 0) {
-      return maxPrice;
+    meals = meals.limit(limit);
+  }
+
+  if ('maxPrice' in query) {
+    const maxPrice = Number(query.maxPrice);
+    if (isNaN(maxPrice)) {
+      return response.send(' provide maxprice a number');
     } else {
-      return 'no cheap meal found';
+      meals = meals.where('meal.price', '<=', maxPrice);
     }
   }
   if ('title' in query) {
-    const title = mealsArray.filter((meal) =>
-      meal.title.toLowerCase().includes(query.title.toLowerCase()),
-    );
-    if (title.length < 1) {
-      return 'No meal found matching title';
+    const title = query.title.toLowerCase();
+    if (!isNaN(query.title)) {
+      return response.send('Not a valid title');
+    } else {
+      meals = meals.where('meal.title', 'like', '%' + title + '%');
     }
-    return title;
   }
-  // method1
-  if ('reservationAvailable' in query) {
-    let reservationAvailable = mealsArray.map((meal) => {
-      let mealtotalReservation = reservationsArray
-        .filter((reservation) => meal.id === reservation.meal_id)
-        .map((newMeal) => newMeal.number_of_guests)
-        .reduce((one, another) => one + another, 0);
-      return {
-        ...mealsArray,
-        'Total Reservation': mealtotalReservation,
-        'Available Reservation': meal.max_reservations - mealtotalReservation,
-      };
-    });
 
-    return reservationAvailable;
+  if ('createdAfter' in query) {
+    const createdAfter = new Date(query.createdAfter).getTime();
+    meals = meals.where('meal.created_date', '<', createdAfter);
   }
-  // method2
   if ('availableReservations' in query) {
-    const reservationsAvailable = await knex('meal')
+    meals = meals
       .join('reservation', 'meal.id', '=', 'reservation.meal_id')
       .select(
         'meal.id',
-        'reservation.meal_id',
         'title',
-        'when',
-        'meal.created_date',
-        'price',
         'max_reservations',
-        knex.raw('SUM(number_of_guests) AS toal_guests'),
+        knex.raw('SUM(number_of_guests) AS total_guests'),
         knex.raw(
           '(max_reservations-SUM(number_of_guests)) AS "Available Reservation"',
         ),
       )
       .where('max_reservations', '>', 'number_of_guests')
-      .groupBy('meal_id');
-    const available = reservationsAvailable.filter(
-      (reservation) => reservation.max_reservations > reservation.toal_guests,
-    );
-
-    return available;
+      .groupBy('meal_id')
+      .having(knex.raw('(max_reservations-SUM(number_of_guests)) > 0'));
   }
-  if ('createdAfter' in query) {
-    const MealsCreatedAfter = mealsArray.filter(
-      (meal) =>
-        new Date(meal.created_date).getTime() >
-        new Date(query.createdAfter).getTime(),
-    );
-    if (MealsCreatedAfter.length === 0) {
-      return 'No meal found created in this date';
+
+  try {
+    const mealsResult = await meals;
+
+    if (mealsResult.length < 1) {
+      response.send(' no meal found');
+    } else {
+      response.json(mealsResult);
     }
-    return MealsCreatedAfter;
+  } catch (error) {
+    response.status(500).json({
+      status: 'failed',
+      message: `internal server error in 'query based search'
+      //GET meals api/meals/  ${error}`,
+    });
   }
-
-  return mealsArray;
-}
-
-// Meals based on query
-//GET api/meals/
-router.get('/', async (request, response) => {
-  const mealsArray = await getMeals(request.query);
-  response.json(mealsArray);
 });
 
 // Adds a new meal
@@ -183,7 +146,6 @@ router.post('/', async (request, response) => {
       message: `Created ${mealPost}`,
     });
   } catch (error) {
-    console.log(error);
     response.status(500).json({
       status: 'failed',
       message: `internal server error in POST api/meals/ ${error}`,
@@ -206,7 +168,6 @@ router.get('/:id', async (request, response) => {
     }
     response.json(mealByID);
   } catch (error) {
-    console.log(error);
     response.status(500).json({
       status: 'failed',
       message: `internal server error  GET api/meals/:id ${error}`,
@@ -220,7 +181,6 @@ router.put('/:id', async (request, response) => {
   try {
     const validData = checkValidData(request.body);
     const checkedId = await knex('meal').where({ id: request.params.id });
-    // how to validate if price is sent as string???
     if (Object.keys(validData).length === 0) {
       return response.status(400).json({
         status: 'Failed',
@@ -249,7 +209,6 @@ router.put('/:id', async (request, response) => {
       updated: mealUpdateByID,
     });
   } catch (error) {
-    console.log(error);
     response.status(500).json({
       status: 'failed',
       message: `internal server error  PUT api/meals/:id ${error}`,
@@ -278,7 +237,6 @@ router.delete('/:id', async (request, response) => {
       deleted: mealDeleteByID,
     });
   } catch (error) {
-    console.log(error);
     response.status(500).json({
       status: 'failed',
       message: `internal server error in Deletes meal by id ${error}`,
