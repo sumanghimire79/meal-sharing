@@ -20,7 +20,9 @@ export function Home() {
             alt="Pizza"
             height="140px"
           />
-          <a href="/all-meals/3">More ...</a>
+          <Link exact to={`/menu/3`}>
+            More ...
+          </Link>
         </div>
         <div>
           <h1>Best Pita</h1>
@@ -29,7 +31,9 @@ export function Home() {
             alt="Pita Bread"
             height="140px"
           />
-          <a href="/all-meals/5">More ...</a>
+          <Link exact to={`/menu/5`}>
+            More ...
+          </Link>
         </div>
         <div>
           <h1>Best Burger</h1>
@@ -38,7 +42,9 @@ export function Home() {
             alt=""
             height="140px"
           />
-          <a href="/all-meals/4">More ...</a>
+          <Link exact to={`/menu/4`}>
+            More ...
+          </Link>
         </div>
       </div>
     </div>
