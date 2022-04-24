@@ -7,14 +7,15 @@ import { Navigation } from './components/Navigation';
 import { About } from './components/About';
 
 import { Menu } from './components/menu/Menu';
-import { MealDetails } from './components/menu/MealDetails';
+import { MealSpecific } from './components/menu/MealSpecific';
 import { AddMeal } from './components/menu/AddMeal';
 
-import { Reservation } from './components/reservation/Reservation';
+import { Reservations } from './components/reservation/Reservations';
+import { ReservationSpecific } from './components/reservation/ReservationSpecific';
 import { AddReservation } from './components/reservation/AddReservation';
 
 import { Reviews } from './components/review/Reviews';
-import { AllReviews } from './components/review/AllReviews';
+import { ReviewSpecific } from './components/review/ReviewSpecific';
 import { AddReview } from './components/review/AddReview';
 
 import { Contact } from './components/Contact';
@@ -30,20 +31,22 @@ function App() {
         <Switch>
           <Route path="/about" component={About} />
 
+          <Route exact path="/menu/:id" component={MealSpecific} />
           <Route exact path="/menu" component={Menu} />
-          <Route exact path="/menu/:id" component={MealDetails} />
           <Route exact path="/addMeal" component={AddMeal} />
 
-          <Route exact path="/reviews/:id" component={Reviews} />
-          <Route exact path="/all-reviews" component={AllReviews} />
-          <Route exact path="/all-reviews/AddReview" component={AddReview} />
+          <Route exact path="/reviews/:id" component={ReviewSpecific} />
+          <Route exact path="/reviews" component={Reviews} />
+          <Route exact path="/addReview" component={AddReview} />
 
-          <Route exact path="/reservation" component={Reservation} />
           <Route
             exact
-            path="/reservation/addReservaion"
-            component={AddReservation}
+            path="/reservations/:id"
+            component={ReservationSpecific}
           />
+          <Route exact path="/reservations" component={Reservations} />
+          <Route exact path="/addReservaion" component={AddReservation} />
+
           <Route exact path="/contact" component={Contact} />
 
           <Route exact path="/" component={Home} />

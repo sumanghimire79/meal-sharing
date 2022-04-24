@@ -90,6 +90,24 @@ router.get('/', async (request, response) => {
     const createdAfter = new Date(query.createdAfter).getTime();
     meals = meals.where('meal.created_date', '<', createdAfter);
   }
+
+  // if ('availableReservations' in query) {
+  //   meals = meals
+  //     .join('reservation', 'meal.id', '=', 'reservation.meal_id')
+  //     .select(
+  //       'meal.id',
+  //       'title',
+  //       'max_reservations',
+  //       knex.raw('SUM(number_of_guests) AS total_guests'),
+  //       knex.raw(
+  //         '(max_reservations-SUM(number_of_guests)) AS "Available_Reservation"',
+  //       ),
+  //     )
+  //     .where('max_reservations', '>', 'number_of_guests')
+  //     .groupBy('meal_id')
+  //     .having(knex.raw('(max_reservations-SUM(number_of_guests)) > 0'));
+  // }
+
   if ('availableReservations' in query) {
     meals = meals
       .join('reservation', 'meal.id', '=', 'reservation.meal_id')
@@ -104,7 +122,7 @@ router.get('/', async (request, response) => {
       )
       .where('max_reservations', '>', 'number_of_guests')
       .groupBy('meal_id')
-      .having(knex.raw('(max_reservations-SUM(number_of_guests)) > 0'));
+      .having(knex.raw('(max_reservations-SUM(number_of_guests))>0'));
   }
 
   try {

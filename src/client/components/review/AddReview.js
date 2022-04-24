@@ -53,15 +53,13 @@ export function AddReview() {
       console.log(err);
     }
   };
-  console.log(meals);
+
   const mealTitle = meals.map((meal) => (
-    <option>
-      {' '}
-      {meal.id}
+    <option key={meal.id} value={meal.id}>
       {meal.title}
     </option>
   ));
-
+  console.log(mealId);
   return (
     <>
       <h1>Add Review</h1>
@@ -99,7 +97,8 @@ export function AddReview() {
               type="number"
               name="meal_id"
               value={mealId}
-              onChange={(e) => setMealId(Number(e.target.value.match(/\d+/g)))}
+              // onChange={(e) => setMealId(Number(e.target.value.match(/\d+/g)))}
+              onChange={(e) => setMealId(e.target.value)}
               placeholder="meal id/title..."
             >
               {mealTitle}

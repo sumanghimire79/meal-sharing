@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import '../mealSharing.css';
 
-export function MealDetails() {
+export function MealSpecific() {
   const [meals, setMeals] = useState([]);
   const [reservations, setReservations] = useState([]);
 
@@ -75,7 +75,7 @@ export function MealDetails() {
 
   return (
     <div>
-      <h1> Meal Details</h1>
+      <h1> Meal Specific page</h1>
       {meals.status === 'Failed' ? (
         <h1 key={meals.message}> {meals.message}</h1>
       ) : (
@@ -98,9 +98,13 @@ export function MealDetails() {
                   {meal.max_reservations} Persons
                 </p>
               </Link>
-
+              <p>------</p>
+              <Link exact to={`/reservations/${meal.id}`}>
+                <strong> Reservations of this meal </strong>
+              </Link>
+              <p>------</p>
               <Link exact to={`/reviews/${meal.id}`}>
-                <strong> View Review of this meal </strong>
+                <strong> Reviews of this meal </strong>
               </Link>
             </section>
           </div>

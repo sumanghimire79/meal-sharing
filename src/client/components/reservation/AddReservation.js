@@ -4,6 +4,7 @@ import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
 
 export function AddReservation() {
   const [availableReservations, setAvailableReservations] = useState([]);
+
   const [numberOfGuests, setNumberOfGuests] = useState();
   const [phone, setPhone] = useState('');
   const [fullName, setFulllName] = useState('');
@@ -45,6 +46,7 @@ export function AddReservation() {
       });
 
       let resJson = await res.json();
+
       console.log(resJson);
       if (res.status === 201) {
         setFulllName('');
@@ -60,8 +62,8 @@ export function AddReservation() {
   };
   const title = availableReservations.map((available) => (
     <>
-      <option>
-        ID: {available.id} title: {available.title}
+      <option key={available.id} value={available.id}>
+        {available.title}
       </option>
     </>
   ));
@@ -76,7 +78,7 @@ export function AddReservation() {
       <div className="display-container">
         {availableReservations.map((availableReservation) => {
           return (
-            <div className="display-item">
+            <div className="display-item" key={availableReservation.id}>
               <p> MealID : {availableReservation.id}</p>
               <p>{availableReservation.title}</p>
               <p> Capacity: {availableReservation.max_reservations}</p>
@@ -102,7 +104,7 @@ export function AddReservation() {
               type="number"
               name="meal_id"
               value={mealId}
-              onChange={(e) => setMealId(Number(e.target.value.match(/\d+/g)))}
+              onChange={(e) => setMealId(e.target.value)}
               placeholder="meal title..."
             >
               {title}

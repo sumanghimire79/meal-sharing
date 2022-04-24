@@ -19,10 +19,10 @@ export function Navigation() {
           <li>Menu</li>
         </Link>
 
-        <Link to={'/reservation'}>
-          <li>Reservation</li>
+        <Link to={'/reservations'}>
+          <li>Reservations</li>
         </Link>
-        <Link to={'/all-reviews'}>
+        <Link to={'/reviews'}>
           <li>Reviews</li>
         </Link>
         <Link to={'/contact'}>

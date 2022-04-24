@@ -61,6 +61,7 @@ export function Menu() {
           <h1 key={meal.id}>{meal.title}</h1>
           <span> Price :{meal.price}</span>
         </Link>
+        <button> Delete Meal</button>
       </section>
     );
   });

@@ -1,62 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import '../mealSharing.css';
+import React, { useEffect, useState, createContext } from 'react';
+import { Link } from 'react-router-dom';
+import Stars from 'react-stars-display';
 
-export function Reviews({ match }) {
-  const id = Number(match.params.id);
-
+export function Reviews() {
   const [reviews, setReviews] = useState([]);
-  const history = useHistory();
 
   const fetchItem = async () => {
     const data = await fetch('http://localhost:3000/api/reviews');
     const jsonData = await data.json();
-
     console.log(jsonData);
     setReviews(jsonData);
   };
   useEffect(() => {
     fetchItem();
   }, []);
-  const reviewSpecific = reviews.filter((review) => review.meal_id === id);
-  console.log(reviewSpecific);
 
-  function handleClickDeleteReview() {
-    fetch('http://localhost:3000/api/reviews/' + id, {
-      method: 'DELETE',
-    });
-    // history.push('/');
-  }
   return (
-    <>
-      <h1>Reviews page</h1>
-      <i>
-        <b>This meal has got {reviewSpecific.length} reviews</b>
-      </i>
+    <div>
+      <h1> All {reviews.length} Reviews</h1>
       <>
-        <Link exact to={'/all-reviews/AddReview'}>
-          {<p>Add a reviews for this meal</p>}
+        <Link exact to={'/AddReview'}>
+          {<p>Add a review </p>}
         </Link>
       </>
-      {reviewSpecific.length === 0 ? (
-        <>
-          <Link exact to={'/all-reviews'}>
-            {<p>view all reviews</p>}
-          </Link>
-        </>
-      ) : (
-        <section className="display-container">
-          {reviewSpecific.map((review) => (
-            <section className="display-item">
-              <h3>Review: {review.title}</h3>
-              <p>Ratings: {review.stars}</p>
-              <p>{review.description}</p>
-              <p> Review Date: {review.created_date}</p>
-              <button onClick={handleClickDeleteReview}>Delete Review</button>
-            </section>
-          ))}
-        </section>
-      )}
-    </>
+      <section className="display-container">
+        {reviews.map((review, index) => {
+          return (
+            <>
+              <section className="display-item" key={index}>
+                <Link
+                  exact
+                  to={`/menu/${review.meal_id}`}
+                  title="click to view the meal"
+                >
+                  <h1>
+                    {review.id}
+                    <span>. </span>
+                    {review.title}
+                  </h1>
+                  <p>{review.description} </p>
+                  <p> Stars: {review.stars} </p>
+                  <Stars stars={review.stars} size={25} />
+                  <p> Meal: {review.meal_id} </p>
+                  <p> Review Date: {review.created_date.slice(0, 10)} </p>
+                </Link>
+              </section>
+            </>
+          );
+        })}
+      </section>
+    </div>
   );
 }
