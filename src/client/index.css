@@ -6,8 +6,8 @@
 }
 
 #root {
-  padding-left: 30%;
-  padding-right: 30%;
+  padding-left: 10%;
+  padding-right: 10%;
   height: 100vh;
 }
 
@@ -39,8 +39,8 @@ button {
 
 @media screen and (max-width: 1400px) {
   #root {
-    padding-left: 30%;
-    padding-right: 30%;
+    padding-left: 5%;
+    padding-right: 5%;
   }
 }
 

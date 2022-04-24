@@ -34,8 +34,8 @@ function checkValidData(data) {
         throw new Error();
       }
     }
-    if ('max_reservation' in validData) {
-      if (typeof validData.max_reservation !== 'number') {
+    if ('max_reservations' in validData) {
+      if (typeof validData.max_reservations !== 'number') {
         throw new Error();
       }
     }
@@ -99,7 +99,7 @@ router.get('/', async (request, response) => {
         'max_reservations',
         knex.raw('SUM(number_of_guests) AS total_guests'),
         knex.raw(
-          '(max_reservations-SUM(number_of_guests)) AS "Available Reservation"',
+          '(max_reservations-SUM(number_of_guests)) AS "Available_Reservation"',
         ),
       )
       .where('max_reservations', '>', 'number_of_guests')
