@@ -55,6 +55,13 @@ export function MealSpecific() {
     setMeals(jsonData);
   };
 
+  function handleClickDeleteMeal(ID) {
+    fetch(`http://localhost:3000/api/meals/${ID}`, {
+      method: 'DELETE',
+    });
+    // history.push('/');
+  }
+
   const getReservations = async () => {
     const data = await fetch(`http://localhost:3000/api/reservations`);
     const jsonData = await data.json();
@@ -85,7 +92,7 @@ export function MealSpecific() {
               <h1>
                 {meal.id} {meal.title}
               </h1>
-              <Link exact to={'/menu'}>
+              <Link exact to={'/menu'} title="Go back to menu">
                 <i> {meal.description}</i>
                 <p>
                   <strong> Location :</strong> {meal.location}
@@ -98,14 +105,19 @@ export function MealSpecific() {
                   {meal.max_reservations} Persons
                 </p>
               </Link>
-              <p>------</p>
-              <Link exact to={`/reservations/${meal.id}`}>
-                <strong> Reservations of this meal </strong>
-              </Link>
-              <p>------</p>
-              <Link exact to={`/reviews/${meal.id}`}>
-                <strong> Reviews of this meal </strong>
-              </Link>
+              <span className="mealSpecificButtonSpan">
+                <Link exact to={`/reviews/${meal.id}`}>
+                  <button> Review</button>
+                </Link>
+
+                <Link exact to={`/reservations/${meal.id}`}>
+                  <button> Reservation</button>
+                </Link>
+
+                <button onClick={() => handleClickDeleteMeal(meal.id)}>
+                  Delete
+                </button>
+              </span>
             </section>
           </div>
         ))

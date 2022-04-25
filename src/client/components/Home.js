@@ -8,7 +8,7 @@ export function Home() {
       <div className="div-center">
         <h1>Book your table now</h1>
 
-        <Link exact to={`/reservation/addReservaion`}>
+        <Link exact to={`/addReservaion`}>
           <button>Reserve Now</button>
         </Link>
       </div>

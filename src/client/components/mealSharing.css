@@ -124,6 +124,15 @@ a:visited{
   word-wrap: break-word;
 
 }
+.mealSpecificButtonSpan{
+ 
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+
+}
+
 .display-reviewItem{
   background-color: rgb(126, 118, 118);
 }

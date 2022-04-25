@@ -25,8 +25,8 @@ export function Reservations() {
           <div key={reservation.id} className="display-item">
             <Link
               exact
-              to={`/menu/${reservation.meal_id}`}
-              title="click to view the meal"
+              to={`/reservations/${reservation.meal_id}`}
+              title="click to view other reservations for this meal"
             >
               <h5> {reservation.contact_name}</h5>
               <p> {reservation.contact_email}</p>

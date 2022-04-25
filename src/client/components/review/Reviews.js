@@ -30,7 +30,7 @@ export function Reviews() {
               <section className="display-item" key={index}>
                 <Link
                   exact
-                  to={`/menu/${review.meal_id}`}
+                  to={`/reviews/${review.meal_id}`}
                   title="click to view the meal"
                 >
                   <h1>

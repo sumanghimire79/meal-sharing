@@ -57,11 +57,10 @@ export function Menu() {
   const showData = correctData.map((meal) => {
     return (
       <section className="display-item" key={meal.id}>
-        <Link exact to={`/menu/${meal.id}`}>
+        <Link exact to={`/menu/${meal.id}`} title="View Meal Details">
           <h1 key={meal.id}>{meal.title}</h1>
           <span> Price :{meal.price}</span>
         </Link>
-        <button> Delete Meal</button>
       </section>
     );
   });

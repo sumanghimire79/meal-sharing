@@ -12,7 +12,7 @@ export function AddReview() {
 
   const [message, setMessage] = useState('');
   const [isDone, setIsDone] = useState(false);
-
+  console.log(typeof mealId);
   const fetchReview = async () => {
     const data = await fetch('http://localhost:3000/api/meals');
     const jsonData = await data.json();
@@ -96,7 +96,7 @@ export function AddReview() {
             <select
               type="number"
               name="meal_id"
-              value={mealId}
+              value={Number(mealId)}
               // onChange={(e) => setMealId(Number(e.target.value.match(/\d+/g)))}
               onChange={(e) => setMealId(e.target.value)}
               placeholder="meal id/title..."
