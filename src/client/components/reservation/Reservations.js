@@ -21,8 +21,8 @@ export function Reservations() {
       </Link>
       {<h1> All {reservations.length} reservations </h1>}
       <div className="display-container">
-        {reservations.map((reservation) => (
-          <div key={reservation.id} className="display-item">
+        {reservations.map((reservation, index) => (
+          <div key={index} className="display-item">
             <Link
               exact
               to={`/reservations/${reservation.meal_id}`}

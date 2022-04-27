@@ -1,12 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import '../mealSharing.css';
+import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
 
 export function MealSpecific() {
   const [meals, setMeals] = useState([]);
   const [reservations, setReservations] = useState([]);
 
-  const [numberOfGuests, setNumberOfGuests] = useState(0);
+  const [numberOfGuests, setNumberOfGuests] = useState();
   const [phone, setPhone] = useState('');
   const [fullName, setFulllName] = useState('');
   const [email, setEmail] = useState('');
@@ -67,6 +68,7 @@ export function MealSpecific() {
     const jsonData = await data.json();
     setReservations(jsonData);
   };
+
   useEffect(() => {
     getMealWithId();
     getReservations();
@@ -86,12 +88,13 @@ export function MealSpecific() {
       {meals.status === 'Failed' ? (
         <h1 key={meals.message}> {meals.message}</h1>
       ) : (
-        meals.map((meal) => (
+        meals.map((meal, index) => (
           <div className="display-container">
-            <section className="display-item" key={meal.id}>
+            <section className="display-item" key={index}>
               <h1>
                 {meal.id} {meal.title}
               </h1>
+
               <Link exact to={'/menu'} title="Go back to menu">
                 <i> {meal.description}</i>
                 <p>
@@ -137,9 +140,8 @@ export function MealSpecific() {
             ' seat more than the limit...'
           : null}
         {seatAvailable >= 1 ? (
-          <form className="reservationDetailpage" onSubmit={handleSubmit}>
-            <label>
-              Number of Guests
+          <SubmitFormFancyCSS>
+            <form className="reservationDetailpage" onSubmit={handleSubmit}>
               <input
                 type="number"
                 name="number_of_guests"
@@ -147,10 +149,7 @@ export function MealSpecific() {
                 onChange={(e) => setNumberOfGuests(e.target.value)}
                 placeholder="Number of guests..."
               />
-            </label>
 
-            <label>
-              Phone
               <input
                 type="number"
                 name="contact_phonenumber"
@@ -158,9 +157,7 @@ export function MealSpecific() {
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Phone Number..."
               />
-            </label>
-            <label>
-              Full Name
+
               <input
                 type="text"
                 name="contact_name"
@@ -168,9 +165,7 @@ export function MealSpecific() {
                 onChange={(e) => setFulllName(e.target.value)}
                 placeholder="Enter your fullname..."
               />
-            </label>
-            <label>
-              E-mail
+
               <input
                 type="email"
                 name="contact_email"
@@ -178,28 +173,26 @@ export function MealSpecific() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="email@email.com"
               />
-            </label>
-            <label>
-              Date
+
               <input
                 type="date"
                 name="created_date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
               />
-            </label>
 
-            <div className="submit-form">
-              {!isDone && <button type="submit">Add Reservation</button>}
-              {isDone && (
-                <button type="submit" disabled>
-                  Adding Reservation...{' '}
-                </button>
-              )}
-            </div>
+              <div className="submit-form">
+                {!isDone && <button type="submit">Add Reservation</button>}
+                {isDone && (
+                  <button type="submit" disabled>
+                    Adding Reservation...{' '}
+                  </button>
+                )}
+              </div>
 
-            <div className="message">{message ? <p>{message}</p> : null}</div>
-          </form>
+              <div className="message">{message ? <p>{message}</p> : null}</div>
+            </form>
+          </SubmitFormFancyCSS>
         ) : (
           <p>Reservation not available</p>
         )}

@@ -39,8 +39,8 @@ export function Reviews() {
                     {review.title}
                   </h1>
                   <p>{review.description} </p>
-                  <p> Stars: {review.stars} </p>
-                  <Stars stars={review.stars} size={25} />
+                  {/* <p> Stars: {review.stars} </p> */}
+                  <Stars stars={review.stars} size={30} />
                   <p> Meal: {review.meal_id} </p>
                   <p> Review Date: {review.created_date.slice(0, 10)} </p>
                 </Link>

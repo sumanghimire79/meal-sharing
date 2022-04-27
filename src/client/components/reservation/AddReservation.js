@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createContext } from 'react';
 
 import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
-
+import { EditReservation } from './EditReservation';
+export const TitleCreateContext = createContext([]);
 export function AddReservation() {
   const [availableReservations, setAvailableReservations] = useState([]);
 
@@ -36,7 +37,7 @@ export function AddReservation() {
       contact_email: email,
       meal_id: mealId,
     };
-
+    console.log(numberOfGuests);
     try {
       setIsDone(true);
       let res = await fetch('http://localhost:3000/api/reservations', {
@@ -60,9 +61,9 @@ export function AddReservation() {
       console.log(err);
     }
   };
-  const title = availableReservations.map((available) => (
+  const title = availableReservations.map((available, index) => (
     <>
-      <option key={available.id} value={available.id}>
+      <option key={index} value={available.id}>
         {available.title}
       </option>
     </>
@@ -70,15 +71,33 @@ export function AddReservation() {
 
   return (
     <>
+      <TitleCreateContext.Provider
+        value={{
+          title,
+          numberOfGuests,
+          setNumberOfGuests,
+          phone,
+          setPhone,
+          fullName,
+          setFulllName,
+          email,
+          setEmail,
+          mealId,
+          setMealId,
+          date,
+          setDate,
+        }}
+      ></TitleCreateContext.Provider>
+
       {
         <h1>
           All {availableReservations.length} meals available for reservations{' '}
         </h1>
       }
       <div className="display-container">
-        {availableReservations.map((availableReservation) => {
+        {availableReservations.map((availableReservation, index) => {
           return (
-            <div className="display-item" key={availableReservation.id}>
+            <div className="display-item" key={index}>
               <p> MealID : {availableReservation.id}</p>
               <p>{availableReservation.title}</p>
               <p> Capacity: {availableReservation.max_reservations}</p>
@@ -88,7 +107,6 @@ export function AddReservation() {
           );
         })}
       </div>
-
       <h1>Add Reservation</h1>
       {
         <form onSubmit={handleSubmit}>

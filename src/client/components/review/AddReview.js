@@ -54,8 +54,8 @@ export function AddReview() {
     }
   };
 
-  const mealTitle = meals.map((meal) => (
-    <option key={meal.id} value={meal.id}>
+  const mealTitle = meals.map((meal, index) => (
+    <option key={index} value={meal.id}>
       {meal.title}
     </option>
   ));

@@ -13,6 +13,7 @@ import { AddMeal } from './components/menu/AddMeal';
 import { Reservations } from './components/reservation/Reservations';
 import { ReservationSpecific } from './components/reservation/ReservationSpecific';
 import { AddReservation } from './components/reservation/AddReservation';
+import { EditReservation } from './components/reservation/EditReservation';
 
 import { Reviews } from './components/review/Reviews';
 import { ReviewSpecific } from './components/review/ReviewSpecific';
@@ -44,11 +45,11 @@ function App() {
             path="/reservations/:id"
             component={ReservationSpecific}
           />
+          <Route exact path="/editReservaion/:id" component={EditReservation} />
           <Route exact path="/reservations" component={Reservations} />
           <Route exact path="/addReservaion" component={AddReservation} />
 
           <Route exact path="/contact" component={Contact} />
-
           <Route exact path="/" component={Home} />
           <Route path="*" component={NotFound} />
         </Switch>

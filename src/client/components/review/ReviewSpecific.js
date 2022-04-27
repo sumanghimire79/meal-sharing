@@ -39,38 +39,39 @@ export function ReviewSpecific({ match }) {
           <Link exact to={'/addReview'}>
             {<p>Add a review for this meal</p>}
           </Link>
-
           <Link exact to={'/reviews'}>
             {<p>view all reviews</p>}
           </Link>
         </>
       ) : (
-        <section className="display-container">
-          <Link exact to={'/addReview'}>
-            {<p>Add a review for this meal</p>}
-          </Link>
+        <>
           <Link exact to={'/reviews'} title="view all reviews">
             {<p>view all reviews</p>}
           </Link>
+          <Link exact to={'/addReview'}>
+            {<p>Add review </p>}
+          </Link>
+          <section className="display-container">
+            {reviewSpecific.map((review, index) => (
+              <section key={index} className="display-item">
+                <Link
+                  exact
+                  to={`/menu/${review.meal_id}`}
+                  title="click to view the specific meal for this review "
+                >
+                  <h3>Review: {review.title}</h3>
+                  <p>Ratings: {review.stars}</p>
+                  <p>{review.description}</p>
+                  <p> Review Date: {review.created_date.slice(0, 10)}</p>
+                </Link>
 
-          {reviewSpecific.map((review) => (
-            <section className="display-item">
-              <Link
-                exact
-                to={`/menu/${review.meal_id}`}
-                title="click to view the specific meal for this review "
-              >
-                <h3>Review: {review.title}</h3>
-                <p>Ratings: {review.stars}</p>
-                <p>{review.description}</p>
-                <p> Review Date: {review.created_date.slice(0, 10)}</p>
-              </Link>
-              <button onClick={() => handleClickDeleteReview(review.id)}>
-                Delete Review
-              </button>
-            </section>
-          ))}
-        </section>
+                <button onClick={() => handleClickDeleteReview(review.id)}>
+                  Delete Review
+                </button>
+              </section>
+            ))}
+          </section>
+        </>
       )}
     </>
   );

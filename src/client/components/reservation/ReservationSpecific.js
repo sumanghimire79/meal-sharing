@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import '../mealSharing.css';
+// import { EditReservation } from './EditReservation';
 
 export function ReservationSpecific({ match }) {
   const id = Number(match.params.id);
 
   const [reservations, setReservations] = useState([]);
   const [message, setMessage] = useState('');
-  const history = useHistory();
 
   const fetchReservations = async () => {
     const data = await fetch('http://localhost:3000/api/reservations');
@@ -17,16 +17,11 @@ export function ReservationSpecific({ match }) {
   useEffect(() => {
     fetchReservations();
   }, []);
-  const reservationSpecific = reservations.filter(
-    (reservation) => reservation.meal_id === id,
-  );
-  console.log(reservationSpecific);
 
   async function handleClickDeleteReview(ID) {
     const res = await fetch(`http://localhost:3000/api/reservations/${ID}`, {
       method: 'DELETE',
     });
-    // history.push('/');
 
     let resJson = await res.json();
     console.log(resJson);
@@ -37,6 +32,12 @@ export function ReservationSpecific({ match }) {
       setMessage('Some error occured');
     }
   }
+
+  const reservationSpecific = reservations.filter(
+    (reservation) => reservation.meal_id === id,
+  );
+  console.log(reservationSpecific);
+  // <EditReservation reservationSpecific={reservationSpecific} />;
   return (
     <>
       <h1>Reservation specific page</h1>
@@ -54,17 +55,16 @@ export function ReservationSpecific({ match }) {
           </Link>
         </>
       ) : (
-        <section className="display-container">
-          <>
-            <Link exact to={'/addReservaion'}>
-              {<p>Add a reservation for this meal</p>}
-            </Link>
-            <Link exact to={'/reservations'}>
-              {<p>view all Reservations</p>}
-            </Link>
-
-            {reservationSpecific.map((reservation) => (
-              <section key={reservation.id} className="display-item">
+        <section className="reservationSpeceficSection">
+          <Link exact to={'/addReservaion'}>
+            {<p>Add a reservation for this meal</p>}
+          </Link>
+          <Link exact to={'/reservations'}>
+            {<p>view all Reservations</p>}
+          </Link>
+          <section className="display-container">
+            {reservationSpecific.map((reservation, index) => (
+              <section key={index} className="display-item">
                 <Link
                   exact
                   to={`/menu/${reservation.meal_id}`}
@@ -77,13 +77,24 @@ export function ReservationSpecific({ match }) {
                   <p> Contact Email: {reservation.contact_email}</p>
                   <p> Meal ID: {reservation.meal_id}</p>
                 </Link>
+
+                <Link
+                  exact
+                  to={`/editReservaion/${reservation.id}`}
+                  title="click to edit this reservation "
+                >
+                  <button> Edit</button>
+                </Link>
+
                 <button onClick={() => handleClickDeleteReview(reservation.id)}>
-                  Delete Reservation
+                  Delete
                 </button>
               </section>
             ))}
-            <h3>{message}</h3>
-          </>
+            <>
+              <h3>{message}</h3>
+            </>
+          </section>
         </section>
       )}
     </>

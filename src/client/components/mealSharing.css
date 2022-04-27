@@ -124,8 +124,8 @@ a:visited{
   word-wrap: break-word;
 
 }
+
 .mealSpecificButtonSpan{
- 
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -231,3 +231,10 @@ footer{
   width: 100%;
 }
 footer a{color: darkgoldenrod;}
+
+
+@media only screen and (max-width: 600px) {
+  body {
+    background-color: lightblue;
+  }
+}
