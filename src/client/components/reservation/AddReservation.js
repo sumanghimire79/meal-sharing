@@ -1,7 +1,7 @@
 import React, { useEffect, useState, createContext } from 'react';
 
 import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
-import { EditReservation } from './EditReservation';
+
 export const TitleCreateContext = createContext([]);
 export function AddReservation() {
   const [availableReservations, setAvailableReservations] = useState([]);
@@ -71,24 +71,6 @@ export function AddReservation() {
 
   return (
     <>
-      <TitleCreateContext.Provider
-        value={{
-          title,
-          numberOfGuests,
-          setNumberOfGuests,
-          phone,
-          setPhone,
-          fullName,
-          setFulllName,
-          email,
-          setEmail,
-          mealId,
-          setMealId,
-          date,
-          setDate,
-        }}
-      ></TitleCreateContext.Provider>
-
       {
         <h1>
           All {availableReservations.length} meals available for reservations{' '}

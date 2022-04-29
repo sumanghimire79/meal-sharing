@@ -51,14 +51,14 @@ export function EditMeal() {
   }, []);
 
   async function putMeal(e) {
-    // e.preventDefault();
+    e.preventDefault();
     const putMealData = {
       title: title,
       description: description,
       location: location,
       when: when,
-      max_reservations: maxReservation,
-      price: price,
+      max_reservations: Number(maxReservation),
+      price: Number(price),
       created_date: createdDate,
     };
     const putMealOptions = {
@@ -72,7 +72,7 @@ export function EditMeal() {
     );
     const jsonData = await putReviewById.json();
 
-    if (jsonData.ok) {
+    if (jsonData.Status === 201) {
       setEditing(false);
       history.push(`/meals/${mealId}`);
     }
