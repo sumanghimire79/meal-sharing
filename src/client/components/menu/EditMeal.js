@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 export function EditMeal() {
   const { id } = useParams();
   const ID = Number(id);
-  console.log(ID);
+
   const history = useHistory();
 
   const [mealId, setMealId] = useState();
@@ -18,42 +18,40 @@ export function EditMeal() {
   const [price, setPrice] = useState();
   const [createdDate, setCreatedDate] = useState('');
   const [editing, setEditing] = useState(false);
-  console.log(mealId);
-  console.log(title);
 
-  // const today = new Date();
-  // const editedDate =
-  //   today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+  const today = new Date();
+  const editedDate =
+    today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
   const fetchMealsById = async () => {
     const data = await fetch(`http://localhost:3000/api/meals/${ID}`);
     const jsonData = await data.json();
-    console.log(jsonData);
     const result = jsonData.map((editMeal) => {
-      console.log(editMeal);
       return (
         <div>
           {setMealId(editMeal.id)}
           {setTitle(editMeal.title)}
           {setDescription(editMeal.description)}
           {setLocation(editMeal.location)}
-          {setWhen(editMeal.when)}
+          {setWhen(editMeal.when.slice(0, 10))}
           {setMaxReservation(editMeal.max_reservations)}
           {/* {setCreatedDate(editMeal.created_date.split('T')[0])} */}
-          {setCreatedDate(editMeal.created_date)}
+          {setCreatedDate(editMeal.created_date.slice(0, 10))}
+          {/* {setCreatedDate(editMeal.created_date)} */}
           {setPrice(editMeal.price)}
         </div>
       );
     });
-    console.log(result);
   };
-
   useEffect(() => {
-    putMeal();
     fetchMealsById();
   }, []);
+  useEffect(() => {
+    putMeal();
+  }, []);
 
-  async function putMeal() {
+  async function putMeal(e) {
+    // e.preventDefault();
     const putMealData = {
       title: title,
       description: description,
@@ -87,6 +85,7 @@ export function EditMeal() {
       {
         // <form onSubmit={putReview}>
         <SubmitFormFancyCSS>
+          <label> Meal ID </label>
           <input
             type="number"
             name="mealId"
@@ -95,6 +94,7 @@ export function EditMeal() {
             placeholder="Meal id..."
             disabled
           />
+          <label> Meal title </label>
           <input
             type="text"
             name="title"
@@ -102,6 +102,7 @@ export function EditMeal() {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Meal title..."
           />
+          <label> Meal Description</label>
           <input
             type="text"
             name="description"
@@ -109,6 +110,7 @@ export function EditMeal() {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Meal description..."
           />
+          <label> Meal Location </label>
           <input
             type="text"
             name="location"
@@ -116,12 +118,14 @@ export function EditMeal() {
             onChange={(e) => setLocation(e.target.value)}
             placeholder="location..."
           />
+          <label> Meal available Date /when? </label>
           <input
             type="datetime"
             name="when"
             value={when}
             onChange={(e) => setWhen(e.target.value)}
           />
+          <label> Reservation Capacity </label>
           <input
             type="number"
             name="max_reservation"
@@ -129,6 +133,7 @@ export function EditMeal() {
             onChange={(e) => setMaxReservation(Number(e.target.value))}
             placeholder="max reservation..."
           />
+          <label> Meal Price </label>
           <input
             type="number"
             name="price"
@@ -136,9 +141,10 @@ export function EditMeal() {
             onChange={(e) => setPrice(Number(e.target.value))}
             placeholder=" set meal price..."
           />
+          <label> Meal crated date </label>
           <input
-            type="date"
-            name="when"
+            type="datetime"
+            name="createdDate"
             value={createdDate}
             onChange={(e) => setCreatedDate(e.target.value)}
           />
@@ -146,9 +152,9 @@ export function EditMeal() {
             {!editing ? (
               <button
                 type="submit"
-                onClick={() => {
+                onClick={(e) => {
                   setEditing(true);
-                  putMeal();
+                  putMeal(e);
                 }}
               >
                 Update meal
