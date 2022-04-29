@@ -117,6 +117,10 @@ export function MealSpecific() {
                   <button> Reservation</button>
                 </Link>
 
+                <Link exact to={`/editMeal/${meal.id}`}>
+                  <button> Edit </button>
+                </Link>
+
                 <button onClick={() => handleClickDeleteMeal(meal.id)}>
                   Delete
                 </button>

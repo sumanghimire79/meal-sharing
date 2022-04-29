@@ -9,10 +9,14 @@ export function AddMeal() {
   const [when, setWhen] = useState('');
   const [maxReservation, setMaxReservation] = useState();
   const [price, setPrice] = useState();
-  const [createdDate, setCreatedDAte] = useState('');
+  // const [createdDate, setCreatedDAte] = useState('');
 
   const [message, setMessage] = useState('');
   const [isDone, setIsDone] = useState(false);
+
+  const today = new Date();
+  const date =
+    today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
   let handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,7 +27,7 @@ export function AddMeal() {
       when: when,
       max_reservations: maxReservation,
       price: price,
-      created_date: createdDate,
+      created_date: date,
     };
     console.log(mealPost);
     try {
@@ -94,13 +98,13 @@ export function AddMeal() {
               onChange={(e) => setPrice(Number(e.target.value))}
               placeholder=" set meal price..."
             />
-            <input
+            {/* <input
               type="date"
               name="created date"
               value={createdDate}
               onChange={(e) => setCreatedDAte(e.target.value)}
               placeholder="meal created date..."
-            />
+            /> */}
 
             <div className="submit-form">
               {!isDone && <button type="submit">Add Meal</button>}

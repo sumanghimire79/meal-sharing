@@ -71,8 +71,9 @@ export function ReservationSpecific({ match }) {
                   title="click to view the specific meal for this reservation "
                 >
                   <h3>Number of Guests: {reservation.number_of_guests}</h3>
-                  <p>Created Date: {reservation.created_date.slice(0, 10)}</p>
-                  <p>Phone: {reservation.contact_phonenumber}</p>
+                  {/* <p>Created Date: {reservation.created_date}</p> */}
+                  <p>Created Date: {new Date().toString()}</p>
+                  <p>Phone: {Number(reservation.contact_phonenumber)}</p>
                   <p> Contact Name: {reservation.contact_name}</p>
                   <p> Contact Email: {reservation.contact_email}</p>
                   <p> Meal ID: {reservation.meal_id}</p>

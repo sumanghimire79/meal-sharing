@@ -68,9 +68,7 @@ export function Menu() {
   return (
     <div>
       <h1> All available {correctData.length} meals</h1>
-      {/* when checkbox is checked should filter out only available meal for reservation : under working */}
-      <p>available reservation:</p>
-      <input type="checkbox" />
+
       <>
         <Link exact to={'/addMeal'}>
           {<p>Add a meal </p>}

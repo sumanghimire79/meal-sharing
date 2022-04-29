@@ -68,6 +68,13 @@ export function ReviewSpecific({ match }) {
                 <button onClick={() => handleClickDeleteReview(review.id)}>
                   Delete Review
                 </button>
+                <Link
+                  exact
+                  to={`/editReview/${review.id}`}
+                  title="click to edit this review "
+                >
+                  <button>Edit Review</button>
+                </Link>
               </section>
             ))}
           </section>

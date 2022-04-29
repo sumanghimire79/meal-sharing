@@ -9,6 +9,7 @@ import { About } from './components/About';
 import { Menu } from './components/menu/Menu';
 import { MealSpecific } from './components/menu/MealSpecific';
 import { AddMeal } from './components/menu/AddMeal';
+import { EditMeal } from './components/menu/EditMeal';
 
 import { Reservations } from './components/reservation/Reservations';
 import { ReservationSpecific } from './components/reservation/ReservationSpecific';
@@ -18,6 +19,7 @@ import { EditReservation } from './components/reservation/EditReservation';
 import { Reviews } from './components/review/Reviews';
 import { ReviewSpecific } from './components/review/ReviewSpecific';
 import { AddReview } from './components/review/AddReview';
+import { EditReview } from './components/review/EditReview';
 
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
@@ -33,10 +35,12 @@ function App() {
           <Route path="/about" component={About} />
 
           <Route exact path="/menu/:id" component={MealSpecific} />
+          <Route exact path="/editMeal/:id" component={EditMeal} />
           <Route exact path="/menu" component={Menu} />
           <Route exact path="/addMeal" component={AddMeal} />
 
           <Route exact path="/reviews/:id" component={ReviewSpecific} />
+          <Route exact path="/editReview/:id" component={EditReview} />
           <Route exact path="/reviews" component={Reviews} />
           <Route exact path="/addReview" component={AddReview} />
 

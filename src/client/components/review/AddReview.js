@@ -7,12 +7,17 @@ export function AddReview() {
   const [title, setTitle] = useState();
   const [description, setDescription] = useState('');
   const [stars, setStars] = useState('');
-  const [createdDate, setCreatedDate] = useState('');
+
   const [mealId, setMealId] = useState('');
 
   const [message, setMessage] = useState('');
   const [isDone, setIsDone] = useState(false);
   console.log(typeof mealId);
+
+  const today = new Date();
+  const date =
+    today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+
   const fetchReview = async () => {
     const data = await fetch('http://localhost:3000/api/meals');
     const jsonData = await data.json();
@@ -29,7 +34,7 @@ export function AddReview() {
       title: title,
       description: description,
       stars: stars,
-      created_date: createdDate,
+      created_date: date,
       meal_id: mealId,
     };
 
@@ -55,7 +60,7 @@ export function AddReview() {
   };
 
   const mealTitle = meals.map((meal, index) => (
-    <option key={index} value={meal.id}>
+    <option key={index} value={meal.id} defaultValue={'select meal'}>
       {meal.title}
     </option>
   ));
@@ -87,17 +92,11 @@ export function AddReview() {
               onChange={(e) => setStars(e.target.value)}
               placeholder="Review stars..."
             />
-            <input
-              type="date"
-              name="created_date"
-              value={createdDate}
-              onChange={(e) => setCreatedDate(e.target.value)}
-            />
+
             <select
               type="number"
               name="meal_id"
               value={Number(mealId)}
-              // onChange={(e) => setMealId(Number(e.target.value.match(/\d+/g)))}
               onChange={(e) => setMealId(e.target.value)}
               placeholder="meal id/title..."
             >
