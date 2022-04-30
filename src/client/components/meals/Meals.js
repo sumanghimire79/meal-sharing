@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../mealSharing.css';
 
-export function Menu() {
+export const Meals = () => {
   const [meals, setMeals] = useState([]);
   const [data, setData] = useState([]);
   const [serchText, setSerchText] = useState();
@@ -19,7 +19,6 @@ export function Menu() {
   useEffect(() => {
     fetchItem();
   }, []);
-  console.log(meals);
 
   const excludeSearch = [
     'id',
@@ -32,8 +31,6 @@ export function Menu() {
 
   const filterData = (value) => {
     const lowerCaseValue = value.toLowerCase().trim();
-    console.log(lowerCaseValue);
-
     const filteredData = meals.filter((meal) => {
       return Object.keys(meal).some((key) => {
         return excludeSearch.includes(key)
@@ -41,7 +38,7 @@ export function Menu() {
           : meal[key].toString().toLowerCase().includes(lowerCaseValue);
       });
     });
-    console.log(filteredData);
+
     setIsData(filteredData.length === 0 ? true : false);
     setData(filteredData);
   };
@@ -57,7 +54,7 @@ export function Menu() {
   const showData = correctData.map((meal) => {
     return (
       <section className="display-item" key={meal.id}>
-        <Link exact to={`/menu/${meal.id}`} title="View Meal Details">
+        <Link exact to={`/meals/${meal.id}`} title="View Meal Details">
           <h1 key={meal.id}>{meal.title}</h1>
           <span> Price :{meal.price}</span>
         </Link>
@@ -69,11 +66,10 @@ export function Menu() {
     <div>
       <h1> All available {correctData.length} meals</h1>
 
-      <>
-        <Link exact to={'/addMeal'}>
-          {<p>Add a meal </p>}
-        </Link>
-      </>
+      <Link exact to={'/addMeal'}>
+        {<button> Add Meal</button>}
+      </Link>
+      <hr></hr>
       <form onSubmit={handleChange}>
         <input
           value={serchText}
@@ -84,9 +80,10 @@ export function Menu() {
           placeholder="search meal ..."
         />
       </form>
+      <hr></hr>
       <section className="display-container">
         {isData === true ? <span>No data</span> : showData}
       </section>
     </div>
   );
-}
+};

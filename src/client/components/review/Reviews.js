@@ -2,7 +2,7 @@ import React, { useEffect, useState, createContext } from 'react';
 import { Link } from 'react-router-dom';
 import Stars from 'react-stars-display';
 
-export function Reviews() {
+export const Reviews = () => {
   const [reviews, setReviews] = useState([]);
 
   const fetchItem = async () => {
@@ -20,9 +20,10 @@ export function Reviews() {
       <h1> All {reviews.length} Reviews</h1>
       <>
         <Link exact to={'/AddReview'}>
-          {<p>Add a review </p>}
+          {<button>Add Review</button>}
         </Link>
       </>
+      <hr></hr>
       <section className="display-container">
         {reviews.map((review, index) => {
           return (
@@ -51,4 +52,4 @@ export function Reviews() {
       </section>
     </div>
   );
-}
+};

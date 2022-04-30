@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
 
-export function AddReview() {
+export const AddReview = () => {
   const [meals, setMeals] = useState([]);
   const [title, setTitle] = useState();
   const [description, setDescription] = useState('');
@@ -33,9 +33,9 @@ export function AddReview() {
     const reviewPost = {
       title: title,
       description: description,
-      stars: stars,
+      stars: Number(stars),
       created_date: date,
-      meal_id: mealId,
+      meal_id: Number(mealId),
     };
 
     try {
@@ -71,6 +71,7 @@ export function AddReview() {
       {
         <form onSubmit={handleSubmit}>
           <SubmitFormFancyCSS>
+            <label>Review Title</label>
             <input
               type="text"
               name="title"
@@ -78,6 +79,7 @@ export function AddReview() {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Review title..."
             />
+            <label>Review Description</label>
             <input
               type="text"
               name="description"
@@ -85,6 +87,7 @@ export function AddReview() {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Review description..."
             />
+            <label>Review Stars</label>
             <input
               type="number"
               name="stars"
@@ -92,7 +95,7 @@ export function AddReview() {
               onChange={(e) => setStars(e.target.value)}
               placeholder="Review stars..."
             />
-
+            <label>Meal id/Title</label>
             <select
               type="number"
               name="meal_id"
@@ -117,4 +120,4 @@ export function AddReview() {
       }
     </>
   );
-}
+};

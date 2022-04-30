@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
-export function EditReview() {
+export const EditReview = () => {
   const { id } = useParams();
   console.log(id);
   const history = useHistory();
@@ -48,14 +48,15 @@ export function EditReview() {
   };
   useEffect(() => {
     titleforReviewToEdit();
-  }, [reviewMealId]);
+  }, []);
 
   useEffect(() => {
-    putReview();
+    // putReview(e);
     reviewById();
   }, []);
 
-  async function putReview() {
+  async function putReview(e) {
+    e.preventDefault();
     const putReviewData = {
       title: reviewTitle,
       description: reviewDescription,
@@ -73,15 +74,16 @@ export function EditReview() {
       putReviewOptions,
     );
     const jsonData = await putReviewById.json();
-    if (jsonData.ok) {
+    if (putReviewById.ok) {
       setEditing(false);
+      alert('review is updated');
       history.push(`/reviews/${reviewMealId}`);
     }
   }
 
   return (
     <div>
-      <h1>edit review page</h1>
+      <h1>Edit Review</h1>
 
       {
         // <form onSubmit={putReview}>
@@ -97,15 +99,6 @@ export function EditReview() {
           />
 
           <label> Review Title </label>
-          {/* <select
-            type="number"
-            name="review title"
-            value={reviewMealId}
-            onChange={(e) => setReviewTitle(e.target.value)}
-            placeholder="Review Title..."
-          >
-            {reviewTitle}
-          </select> */}
           <input
             type="text"
             name="review title"
@@ -145,24 +138,24 @@ export function EditReview() {
             onChange={() => setDate(reviewMealId)}
             disabled
           />
-          <div className="submit-form">
-            {!editing ? (
-              <button
-                type="submit"
-                onClick={() => {
-                  setEditing(true);
-                  putReview();
-                }}
-              >
-                Update
-              </button>
-            ) : (
-              <button disabled>Updatating...</button>
-            )}
-          </div>
+
+          {!editing ? (
+            <button
+              type="submit"
+              onClick={(e) => {
+                setEditing(true);
+                putReview(e);
+              }}
+            >
+              Update
+            </button>
+          ) : (
+            <button disabled>Updatating...</button>
+          )}
+          <div className="submit-form-button"></div>
         </SubmitFormFancyCSS>
         // </form>
       }
     </div>
   );
-}
+};

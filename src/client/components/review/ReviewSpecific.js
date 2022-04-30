@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import '../mealSharing.css';
 
-export function ReviewSpecific({ match }) {
+export const ReviewSpecific = ({ match }) => {
   const id = Number(match.params.id);
 
   const [reviews, setReviews] = useState([]);
-  const history = useHistory();
 
   const fetchItem = async () => {
     const data = await fetch('http://localhost:3000/api/reviews');
@@ -19,44 +18,38 @@ export function ReviewSpecific({ match }) {
     fetchItem();
   }, []);
   const reviewSpecific = reviews.filter((review) => review.meal_id === id);
-  console.log(reviewSpecific);
 
-  function handleClickDeleteReview(ID) {
-    fetch(`http://localhost:3000/api/reviews/${ID}`, {
-      method: 'DELETE',
-    });
-    // history.push('/');
-  }
   return (
-    <>
-      <h1>Reviews specific page</h1>
-      <i>
-        <b>This meal has got {reviewSpecific.length} reviews</b>
-      </i>
-
+    <div className="specificReturnDiv">
+      <h1>Review Details</h1>
+      <>
+        <i>
+          <b>This meal has got {reviewSpecific.length} reviews</b>
+        </i>
+      </>
       {reviewSpecific.length === 0 ? (
         <>
           <Link exact to={'/addReview'}>
-            {<p>Add a review for this meal</p>}
+            {<button> Add Review for this meal</button>}
           </Link>
           <Link exact to={'/reviews'}>
-            {<p>view all reviews</p>}
+            {<button> View All Reviews</button>}
           </Link>
         </>
       ) : (
         <>
           <Link exact to={'/reviews'} title="view all reviews">
-            {<p>view all reviews</p>}
+            {<button> View All Reviews</button>}
           </Link>
           <Link exact to={'/addReview'}>
-            {<p>Add review </p>}
+            {<button> Add View </button>}
           </Link>
           <section className="display-container">
             {reviewSpecific.map((review, index) => (
               <section key={index} className="display-item">
                 <Link
                   exact
-                  to={`/menu/${review.meal_id}`}
+                  to={`/meals/${review.meal_id}`}
                   title="click to view the specific meal for this review "
                 >
                   <h3>Review: {review.title}</h3>
@@ -64,22 +57,27 @@ export function ReviewSpecific({ match }) {
                   <p>{review.description}</p>
                   <p> Review Date: {review.created_date.slice(0, 10)}</p>
                 </Link>
-
-                <button onClick={() => handleClickDeleteReview(review.id)}>
-                  Delete Review
-                </button>
-                <Link
-                  exact
-                  to={`/editReview/${review.id}`}
-                  title="click to edit this review "
-                >
-                  <button>Edit Review</button>
-                </Link>
+                <div className="detailspecificPagebuttonSpan">
+                  <Link
+                    exact
+                    to={`/editReview/${review.id}`}
+                    title="click to edit this review "
+                  >
+                    <button>Edit</button>
+                  </Link>
+                  <Link
+                    exact
+                    to={`/deleteReview/${review.id}`}
+                    title="click to delete this review "
+                  >
+                    <button>Delete </button>
+                  </Link>
+                </div>
               </section>
             ))}
           </section>
         </>
       )}
-    </>
+    </div>
   );
-}
+};

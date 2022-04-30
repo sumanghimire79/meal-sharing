@@ -15,7 +15,7 @@ export function Navigation() {
         <Link to={'/about'}>
           <li>About</li>
         </Link>
-        <Link to={'/menu'}>
+        <Link to={'/meals'}>
           <li>Menu</li>
         </Link>
 

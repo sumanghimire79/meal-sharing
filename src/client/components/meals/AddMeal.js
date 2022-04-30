@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
 
-export function AddMeal() {
+export const AddMeal = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
@@ -18,18 +18,18 @@ export function AddMeal() {
   const date =
     today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
-  let handleSubmit = async (e) => {
+  let handleSubmitMeal = async (e) => {
     e.preventDefault();
     const mealPost = {
       title: title,
       description: description,
       location: location,
       when: when,
-      max_reservations: maxReservation,
-      price: price,
+      max_reservations: Number(maxReservation),
+      price: Number(price),
       created_date: date,
     };
-    console.log(mealPost);
+
     try {
       setIsDone(true);
       let res = await fetch('http://localhost:3000/api/meals', {
@@ -38,10 +38,8 @@ export function AddMeal() {
         body: JSON.stringify(mealPost),
       });
 
-      let resJson = await res.json();
-      console.log(resJson);
       if (res.status === 201) {
-        setMessage('Meal added successfully');
+        setMessage(`Meal ${title} added successfully`);
         setIsDone(false);
       } else {
         setMessage('Some error occured');
@@ -55,8 +53,9 @@ export function AddMeal() {
     <>
       <h1>Add a meal</h1>
       {
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmitMeal}>
           <SubmitFormFancyCSS>
+            <label>Meal Title</label>
             <input
               type="text"
               name="title"
@@ -64,6 +63,7 @@ export function AddMeal() {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Meal title..."
             />
+            <label>Meal Description</label>
             <input
               type="text"
               name="description"
@@ -71,6 +71,7 @@ export function AddMeal() {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Meal description..."
             />
+            <label>Meal Branch Name</label>
             <input
               type="text"
               name="location"
@@ -78,33 +79,29 @@ export function AddMeal() {
               onChange={(e) => setLocation(e.target.value)}
               placeholder="location..."
             />
+            <label>Meal Available Date </label>
             <input
               type="date"
               name="when"
               value={when}
               onChange={(e) => setWhen(e.target.value)}
             />
+            <label>Max Reservation Capacity</label>
             <input
               type="number"
               name="max_reservation"
               value={maxReservation}
-              onChange={(e) => setMaxReservation(Number(e.target.value))}
+              onChange={(e) => setMaxReservation(e.target.value)}
               placeholder="max reservation..."
             />
+            <label>Meal Price</label>
             <input
               type="number"
               name="price"
               value={price}
-              onChange={(e) => setPrice(Number(e.target.value))}
+              onChange={(e) => setPrice(e.target.value)}
               placeholder=" set meal price..."
             />
-            {/* <input
-              type="date"
-              name="created date"
-              value={createdDate}
-              onChange={(e) => setCreatedDAte(e.target.value)}
-              placeholder="meal created date..."
-            /> */}
 
             <div className="submit-form">
               {!isDone && <button type="submit">Add Meal</button>}
@@ -120,4 +117,4 @@ export function AddMeal() {
       }
     </>
   );
-}
+};

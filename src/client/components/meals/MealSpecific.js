@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import '../mealSharing.css';
 import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
 
-export function MealSpecific() {
+export const MealSpecific = () => {
   const [meals, setMeals] = useState([]);
   const [reservations, setReservations] = useState([]);
 
@@ -56,13 +56,6 @@ export function MealSpecific() {
     setMeals(jsonData);
   };
 
-  function handleClickDeleteMeal(ID) {
-    fetch(`http://localhost:3000/api/meals/${ID}`, {
-      method: 'DELETE',
-    });
-    // history.push('/');
-  }
-
   const getReservations = async () => {
     const data = await fetch(`http://localhost:3000/api/reservations`);
     const jsonData = await data.json();
@@ -84,7 +77,7 @@ export function MealSpecific() {
 
   return (
     <div>
-      <h1> Meal Specific page</h1>
+      <h1> Meal Details</h1>
       {meals.status === 'Failed' ? (
         <h1 key={meals.message}> {meals.message}</h1>
       ) : (
@@ -92,23 +85,31 @@ export function MealSpecific() {
           <div className="display-container">
             <section className="display-item" key={index}>
               <h1>
-                {meal.id} {meal.title}
+                {meal.id}
+                {'.'} {meal.title}
               </h1>
 
-              <Link exact to={'/menu'} title="Go back to menu">
+              <Link exact to={'/meals'} title="Go back to menu">
                 <i> {meal.description}</i>
                 <p>
                   <strong> Location :</strong> {meal.location}
+                </p>
+                <p>
+                  <strong> Available Date :</strong> {meal.when.slice(0, 10)}
                 </p>
                 <p>
                   <strong>Price :</strong> {meal.price}
                 </p>
                 <p>
                   <strong>Reseration Capacity : </strong>
-                  {meal.max_reservations} Persons
+                  {meal.max_reservations} {'Persons'}
+                </p>
+                <p>
+                  <strong>Meal Created Date :</strong>{' '}
+                  {meal.created_date.slice(0, 10)}
                 </p>
               </Link>
-              <span className="mealSpecificButtonSpan">
+              <span className="detailspecificPagebuttonSpan">
                 <Link exact to={`/reviews/${meal.id}`}>
                   <button> Review</button>
                 </Link>
@@ -121,16 +122,16 @@ export function MealSpecific() {
                   <button> Edit </button>
                 </Link>
 
-                <button onClick={() => handleClickDeleteMeal(meal.id)}>
-                  Delete
-                </button>
+                <Link exact to={`/deleteMeal/${meal.id}`}>
+                  <button> Delete </button>
+                </Link>
               </span>
             </section>
           </div>
         ))
       )}
 
-      <h1>Add Reservation</h1>
+      <h1>Add Reservation for this meal</h1>
       <section className="addReservationForm">
         <p>
           <strong>Seat Available : </strong>
@@ -203,4 +204,4 @@ export function MealSpecific() {
       </section>
     </div>
   );
-}
+};

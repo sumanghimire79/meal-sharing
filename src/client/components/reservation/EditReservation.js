@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
-export function EditReservation() {
+export const EditReservation = () => {
   const { id } = useParams();
   const history = useHistory();
 
@@ -17,17 +17,9 @@ export function EditReservation() {
 
   const [editing, setEditing] = useState(false);
 
-  console.log(reservationID);
-  console.log(numberOfGuests);
-  console.log(date);
-  console.log(phone);
-  console.log(fullName);
-  console.log(email);
-  console.log(mealId);
   const fetchReservationById = async () => {
     const data = await fetch(`http://localhost:3000/api/reservations/${id}`);
     const jsonData = await data.json();
-
     const result = await jsonData.map((editReserve) => {
       return (
         <div>
@@ -43,19 +35,12 @@ export function EditReservation() {
     });
   };
 
-  // const date1 = new Date();
-  // const dateParse = date1.toLocaleDateString();
-  // const time1 = date1.toLocaleTimeString();
-  // console.log(dateParse);
-  // console.log(time1);
-
   const titleforMealToEdit = async () => {
     const data = await fetch(`http://localhost:3000/api/meals/${mealId}`);
     const jsonData = await data.json();
     const titleEditReserve = await jsonData.map((editReserve, index) => (
       <option key={index}> {editReserve.title} </option>
     ));
-    console.log(titleEditReserve);
     setTitle(titleEditReserve);
   };
   useEffect(() => {
@@ -67,7 +52,7 @@ export function EditReservation() {
     fetchReservationById();
   }, []);
 
-  function putReservation() {
+  const putReservation = async () => {
     const postReserrvation = {
       number_of_guests: Number(numberOfGuests),
       created_date: date,
@@ -81,19 +66,21 @@ export function EditReservation() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(postReserrvation),
     };
-    fetch(`http://localhost:3000/api/reservations/${id}`, requestOptions).then(
-      (data) => {
-        if (data.ok) {
-          setEditing(false);
-          history.push(`/reservations/${mealId}`);
-        }
-      },
-    );
-  }
+    await fetch(
+      `http://localhost:3000/api/reservations/${id}`,
+      requestOptions,
+    ).then((data) => {
+      if (data.ok) {
+        setEditing(false);
+        alert('Reservation is updated');
+        history.push(`/reservations/${mealId}`);
+      }
+    });
+  };
 
   return (
     <div>
-      <h1>edit reservation page</h1>
+      <h1>Edit Reservation</h1>
 
       {
         // <form onSubmit={putReservation}>
@@ -177,4 +164,4 @@ export function EditReservation() {
       }
     </div>
   );
-}
+};

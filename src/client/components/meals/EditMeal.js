@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
-import { useParams } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
-export function EditMeal() {
+export const EditMeal = () => {
   const { id } = useParams();
   const ID = Number(id);
-
   const history = useHistory();
 
   const [mealId, setMealId] = useState();
@@ -37,7 +35,6 @@ export function EditMeal() {
           {setMaxReservation(editMeal.max_reservations)}
           {/* {setCreatedDate(editMeal.created_date.split('T')[0])} */}
           {setCreatedDate(editMeal.created_date.slice(0, 10))}
-          {/* {setCreatedDate(editMeal.created_date)} */}
           {setPrice(editMeal.price)}
         </div>
       );
@@ -46,11 +43,8 @@ export function EditMeal() {
   useEffect(() => {
     fetchMealsById();
   }, []);
-  useEffect(() => {
-    putMeal();
-  }, []);
 
-  async function putMeal(e) {
+  const putMeal = async (e) => {
     e.preventDefault();
     const putMealData = {
       title: title,
@@ -72,15 +66,16 @@ export function EditMeal() {
     );
     const jsonData = await putReviewById.json();
 
-    if (jsonData.Status === 201) {
-      setEditing(false);
+    if (putReviewById.ok) {
+      setEditing(true);
+      alert('meal is updated');
       history.push(`/meals/${mealId}`);
     }
-  }
+  };
 
   return (
     <div>
-      <h1>edit Meal page</h1>
+      <h1>Edit Meal</h1>
 
       {
         // <form onSubmit={putReview}>
@@ -130,7 +125,7 @@ export function EditMeal() {
             type="number"
             name="max_reservation"
             value={maxReservation}
-            onChange={(e) => setMaxReservation(Number(e.target.value))}
+            onChange={(e) => setMaxReservation(e.target.value)}
             placeholder="max reservation..."
           />
           <label> Meal Price </label>
@@ -138,7 +133,7 @@ export function EditMeal() {
             type="number"
             name="price"
             value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
+            onChange={(e) => setPrice(e.target.value)}
             placeholder=" set meal price..."
           />
           <label> Meal crated date </label>
@@ -168,4 +163,4 @@ export function EditMeal() {
       }
     </div>
   );
-}
+};

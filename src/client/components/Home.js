@@ -16,9 +16,9 @@ export function Home() {
         <div>
           <h1>Best Pizza</h1>
           <img
+            className="bestItem"
             src="https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395__480.jpg"
             alt="Pizza"
-            height="140px"
           />
           <Link exact to={`/menu/3`}>
             More ...
@@ -27,9 +27,9 @@ export function Home() {
         <div>
           <h1>Best Pita</h1>
           <img
+            className="bestItem"
             src="https://mandekogebogen.dk/image/box/2130725/980/50000.jpg?oversize=1"
             alt="Pita Bread"
-            height="140px"
           />
           <Link exact to={`/menu/5`}>
             More ...
@@ -38,9 +38,9 @@ export function Home() {
         <div>
           <h1>Best Burger</h1>
           <img
+            className="bestItem"
             src="https://gastrofun.dk/wp-content/uploads/2020/04/Hjemmelavet-Burger-Shack-Burger-1.jpg"
             alt=""
-            height="140px"
           />
           <Link exact to={`/menu/4`}>
             More ...

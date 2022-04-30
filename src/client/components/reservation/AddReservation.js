@@ -3,7 +3,8 @@ import React, { useEffect, useState, createContext } from 'react';
 import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
 
 export const TitleCreateContext = createContext([]);
-export function AddReservation() {
+
+export const AddReservation = () => {
   const [availableReservations, setAvailableReservations] = useState([]);
 
   const [numberOfGuests, setNumberOfGuests] = useState();
@@ -46,9 +47,6 @@ export function AddReservation() {
         body: JSON.stringify(reservationPost),
       });
 
-      let resJson = await res.json();
-
-      console.log(resJson);
       if (res.status === 201) {
         setFulllName('');
         setEmail('');
@@ -73,7 +71,8 @@ export function AddReservation() {
     <>
       {
         <h1>
-          All {availableReservations.length} meals available for reservations{' '}
+          All {availableReservations.length} meals currently available for
+          reservations{' '}
         </h1>
       }
       <div className="display-container">
@@ -93,6 +92,7 @@ export function AddReservation() {
       {
         <form onSubmit={handleSubmit}>
           <SubmitFormFancyCSS>
+            <label>Number of Guests</label>
             <input
               type="number"
               name="number_of_guests"
@@ -100,6 +100,7 @@ export function AddReservation() {
               onChange={(e) => setNumberOfGuests(e.target.value)}
               placeholder="Number of guests..."
             />
+            <label>Meal Title</label>
             <select
               type="number"
               name="meal_id"
@@ -109,7 +110,7 @@ export function AddReservation() {
             >
               {title}
             </select>
-
+            <label>Contact Number</label>
             <input
               type="number"
               name="contact_phonenumber"
@@ -117,7 +118,7 @@ export function AddReservation() {
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Phone Number..."
             />
-
+            <label>Contact Name</label>
             <input
               type="text"
               name="contact_name"
@@ -125,7 +126,7 @@ export function AddReservation() {
               onChange={(e) => setFulllName(e.target.value)}
               placeholder="Enter your fullname..."
             />
-
+            <label>Contact Email</label>
             <input
               type="email"
               name="contact_email"
@@ -133,7 +134,7 @@ export function AddReservation() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="email@email.com"
             />
-
+            <label>Event Date</label>
             <input
               type="date"
               name="created_date"
@@ -155,4 +156,4 @@ export function AddReservation() {
       }
     </>
   );
-}
+};

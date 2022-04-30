@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../mealSharing.css';
 import { Link } from 'react-router-dom';
-export function Reservations() {
+
+export const Reservations = () => {
   const [reservations, setReservations] = useState([]);
 
   const fetchReservations = async () => {
@@ -16,10 +17,11 @@ export function Reservations() {
 
   return (
     <>
+      {<h1> All {reservations.length} reservations </h1>}
       <Link exact to="/addReservaion">
         <button>Add Reservation</button>
       </Link>
-      {<h1> All {reservations.length} reservations </h1>}
+      <hr></hr>
       <div className="display-container">
         {reservations.map((reservation, index) => (
           <div key={index} className="display-item">
@@ -30,7 +32,7 @@ export function Reservations() {
             >
               <h5> {reservation.contact_name}</h5>
               <p> {reservation.contact_email}</p>
-              <p>Phone : {reservation.contact_phonenumber}</p>
+              <p> Phone : {reservation.contact_phonenumber}</p>
               <p> Number of Guests : {reservation.number_of_guests}</p>
               <p> Event Date: {reservation.created_date.slice(0, 10)}</p>
               <p> meal ID : {reservation.meal_id}</p>
@@ -40,4 +42,4 @@ export function Reservations() {
       </div>
     </>
   );
-}
+};
