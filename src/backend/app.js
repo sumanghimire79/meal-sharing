@@ -6,6 +6,8 @@ const path = require('path');
 const mealsRouter = require('./api/meals');
 const reservationsRouter = require('./api/reservations');
 const reviewsRouter = require('./api/reviews');
+const loginRouter = require('./api/login');
+
 const buildPath = path.join(__dirname, '../../dist');
 const port = process.env.PORT || 3000;
 const cors = require('cors');
@@ -24,16 +26,17 @@ app.use(cors());
 router.use('/meals', mealsRouter);
 router.use('/reservations', reservationsRouter);
 router.use('/reviews', reviewsRouter);
+router.use('/login', loginRouter);
 
 if (process.env.API_PATH) {
-    app.use(process.env.API_PATH, router);
+  app.use(process.env.API_PATH, router);
 } else {
-    throw 'API_PATH is not set. Remember to set it in your .env file';
+  throw 'API_PATH is not set. Remember to set it in your .env file';
 }
 
 // for the frontend. Will first be covered in the react class
 app.use('*', (req, res) => {
-    res.sendFile(path.join(`${buildPath}/index.html`));
+  res.sendFile(path.join(`${buildPath}/index.html`));
 });
 
 module.exports = app;

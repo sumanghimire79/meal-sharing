@@ -28,6 +28,9 @@ export function Navigation() {
         <Link to={'/contact'}>
           <li>Contact</li>
         </Link>
+        <Link to={'/login'}>
+          <li>Login</li>
+        </Link>
       </ul>
     </nav>
   );

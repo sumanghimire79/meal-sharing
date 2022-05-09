@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../mealSharing.css';
-
+// import { SearchMeal } from './SearchMeal';
 export const Meals = () => {
   const [meals, setMeals] = useState([]);
   const [data, setData] = useState([]);
@@ -19,6 +19,24 @@ export const Meals = () => {
   useEffect(() => {
     fetchItem();
   }, []);
+
+  const showData = correctData.map((meal) => {
+    return (
+      <section className="display-item" key={meal.id}>
+        <Link exact to={`/meals/${meal.id}`} title="View Meal Details">
+          <h1 key={meal.id}>{meal.title}</h1>
+          <span> Price :{meal.price}</span>
+        </Link>
+      </section>
+    );
+  });
+
+  // <SearchMeal
+  //   meals={meals}
+  //   value={value}
+  //   setData={setData}
+  //   setIsData={setIsData}
+  // />;
 
   const excludeSearch = [
     'id',
@@ -51,17 +69,6 @@ export const Meals = () => {
     setCorrectData(data.length === 0 ? meals : data);
   }, [handleChange]);
 
-  const showData = correctData.map((meal) => {
-    return (
-      <section className="display-item" key={meal.id}>
-        <Link exact to={`/meals/${meal.id}`} title="View Meal Details">
-          <h1 key={meal.id}>{meal.title}</h1>
-          <span> Price :{meal.price}</span>
-        </Link>
-      </section>
-    );
-  });
-
   return (
     <div>
       <h1> All available {correctData.length} meals</h1>
@@ -82,7 +89,7 @@ export const Meals = () => {
       </form>
       <hr></hr>
       <section className="display-container">
-        {isData === true ? <span>No data</span> : showData}
+        {isData === true ? <span>No data found</span> : showData}
       </section>
     </div>
   );
