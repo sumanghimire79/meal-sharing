@@ -4,7 +4,7 @@ export function About() {
   return (
     <div>
       <div className="about-banner"> </div>
-      <h1>About page</h1>
+      <h1>About Us</h1>
       <p className="about">
         About Us Text Examples are all over the Internet (thank you Google), but
         few go into why it’s a good design beyond just the copy. Here’s the

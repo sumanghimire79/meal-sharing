@@ -18,7 +18,7 @@ export const EditReservation = () => {
   const [editing, setEditing] = useState(false);
 
   const fetchReservationById = async () => {
-    const data = await fetch(`http://localhost:3000/api/reservations/${id}`);
+    const data = await fetch(`/api/reservations/${id}`);
     const jsonData = await data.json();
     const result = await jsonData.map((editReserve) => {
       return (
@@ -36,7 +36,7 @@ export const EditReservation = () => {
   };
 
   const titleforMealToEdit = async () => {
-    const data = await fetch(`http://localhost:3000/api/meals/${mealId}`);
+    const data = await fetch(`/api/meals/${mealId}`);
     const jsonData = await data.json();
     const titleEditReserve = await jsonData.map((editReserve, index) => (
       <option key={index}> {editReserve.title} </option>
@@ -66,10 +66,7 @@ export const EditReservation = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(postReserrvation),
     };
-    await fetch(
-      `http://localhost:3000/api/reservations/${id}`,
-      requestOptions,
-    ).then((data) => {
+    await fetch(`/api/reservations/${id}`, requestOptions).then((data) => {
       if (data.ok) {
         setEditing(false);
         alert('Reservation is updated');
@@ -83,7 +80,6 @@ export const EditReservation = () => {
       <h1>Edit Reservation</h1>
 
       {
-        // <form onSubmit={putReservation}>
         <SubmitFormFancyCSS>
           <label> reservation ID </label>
           <input
@@ -160,7 +156,6 @@ export const EditReservation = () => {
             )}
           </div>
         </SubmitFormFancyCSS>
-        // </form>
       }
     </div>
   );

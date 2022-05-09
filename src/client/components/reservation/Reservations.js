@@ -6,7 +6,7 @@ export const Reservations = () => {
   const [reservations, setReservations] = useState([]);
 
   const fetchReservations = async () => {
-    const data = await fetch('http://localhost:3000/api/reservations');
+    const data = await fetch('/api/reservations');
     const jsonData = await data.json();
     setReservations(jsonData);
   };

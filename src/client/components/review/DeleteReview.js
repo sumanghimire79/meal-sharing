@@ -8,7 +8,7 @@ export const DeleteReview = () => {
   const [deleteNotDEleteMessage, setDeleteNotDEleteMessage] = useState('');
 
   async function handleClickDeleteReview() {
-    const deletebyID = await fetch(`http://localhost:3000/api/reviews/${ID}`, {
+    const deletebyID = await fetch(`/api/reviews/${ID}`, {
       method: 'DELETE',
     });
 

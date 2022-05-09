@@ -9,8 +9,6 @@ export const AddMeal = () => {
   const [when, setWhen] = useState('');
   const [maxReservation, setMaxReservation] = useState();
   const [price, setPrice] = useState();
-  // const [createdDate, setCreatedDAte] = useState('');
-
   const [message, setMessage] = useState('');
   const [isDone, setIsDone] = useState(false);
 
@@ -32,7 +30,7 @@ export const AddMeal = () => {
 
     try {
       setIsDone(true);
-      let res = await fetch('http://localhost:3000/api/meals', {
+      let res = await fetch('api/meals', {
         method: 'POST',
         headers: { 'Content-Type': 'Application/json' },
         body: JSON.stringify(mealPost),

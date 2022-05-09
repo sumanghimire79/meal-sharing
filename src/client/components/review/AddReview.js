@@ -19,7 +19,7 @@ export const AddReview = () => {
     today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
   const fetchReview = async () => {
-    const data = await fetch('http://localhost:3000/api/meals');
+    const data = await fetch('api/meals');
     const jsonData = await data.json();
     setMeals(jsonData);
   };
@@ -40,7 +40,7 @@ export const AddReview = () => {
 
     try {
       setIsDone(true);
-      let res = await fetch('http://localhost:3000/api/reviews', {
+      let res = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'Application/json' },
         body: JSON.stringify(reviewPost),

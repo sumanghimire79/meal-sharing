@@ -9,12 +9,9 @@ export const DeleteMeal = () => {
   const [deleteNotDEleteMessage, setDeleteNotDEleteMessage] = useState('');
 
   const handleClickdeleteMealbyID = async (ID) => {
-    const deleteReservationbyID = await fetch(
-      `http://localhost:3000/api/meals/${ID}`,
-      {
-        method: 'DELETE',
-      },
-    );
+    const deleteReservationbyID = await fetch(`/api/meals/${ID}`, {
+      method: 'DELETE',
+    });
 
     const resJson = await deleteReservationbyID.json();
     console.log(resJson);

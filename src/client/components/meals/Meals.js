@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../mealSharing.css';
-// import { SearchMeal } from './SearchMeal';
+
+
 export const Meals = () => {
   const [meals, setMeals] = useState([]);
   const [data, setData] = useState([]);
@@ -10,7 +11,7 @@ export const Meals = () => {
   const [isData, setIsData] = useState(false);
 
   const fetchItem = async () => {
-    const data = await fetch('http://localhost:3000/api/meals');
+    const data = await fetch('/api/meals');
     const jsonData = await data.json();
     console.log(jsonData);
     setMeals(jsonData);
@@ -31,12 +32,6 @@ export const Meals = () => {
     );
   });
 
-  // <SearchMeal
-  //   meals={meals}
-  //   value={value}
-  //   setData={setData}
-  //   setIsData={setIsData}
-  // />;
 
   const excludeSearch = [
     'id',

@@ -13,21 +13,19 @@ export const EditReview = () => {
   const [reviewStars, setReviewStars] = useState();
   const [reviewCreatedDate, setReviewCreatedDate] = useState('');
   const [reviewMealId, setReviewMealId] = useState();
-  console.log(reviewMealId);
-  // const [title, setTitle] = useState([]);
   const [editing, setEditing] = useState(false);
+
   const today = new Date();
   const reviewDate =
     today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+
   const reviewById = async () => {
-    const data = await fetch(`http://localhost:3000/api/reviews/${id}`);
+    const data = await fetch(`/api/reviews/${id}`);
     const jsonData = await data.json();
-    const result = await jsonData.map((editReview) => {
-      console.log(editReview.meal_id);
+    await jsonData.map((editReview) => {
       return (
         <div>
           {setReviewID(editReview.id)}
-          {/* {setReviewTitle(editReview.title)} */}
           {setReviewDescription(editReview.description)}
           {setReviewStars(editReview.stars)}
           {setReviewCreatedDate(editReview.created_date.split('T')[0])}
@@ -38,20 +36,17 @@ export const EditReview = () => {
   };
 
   const titleforReviewToEdit = async () => {
-    const data = await fetch(`http://localhost:3000/api/meals/${reviewMealId}`);
+    const data = await fetch(`/api/meals/${reviewMealId}`);
     const jsonData = await data.json();
     const mealTitles = jsonData.map((mealTitle, index) => (
       <option key={index}> {mealTitle.title} </option>
     ));
-
-    // setReviewTitle(mealTitles);
   };
   useEffect(() => {
     titleforReviewToEdit();
   }, []);
 
   useEffect(() => {
-    // putReview(e);
     reviewById();
   }, []);
 
@@ -69,10 +64,7 @@ export const EditReview = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(putReviewData),
     };
-    const putReviewById = await fetch(
-      `http://localhost:3000/api/reviews/${id}`,
-      putReviewOptions,
-    );
+    const putReviewById = await fetch(`/api/reviews/${id}`, putReviewOptions);
     const jsonData = await putReviewById.json();
     if (putReviewById.ok) {
       setEditing(false);
@@ -86,7 +78,6 @@ export const EditReview = () => {
       <h1>Edit Review</h1>
 
       {
-        // <form onSubmit={putReview}>
         <SubmitFormFancyCSS>
           <label> Review ID </label>
           <input
@@ -154,7 +145,6 @@ export const EditReview = () => {
           )}
           <div className="submit-form-button"></div>
         </SubmitFormFancyCSS>
-        // </form>
       }
     </div>
   );

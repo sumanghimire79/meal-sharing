@@ -8,15 +8,14 @@ export const ReviewSpecific = ({ match }) => {
   const [reviews, setReviews] = useState([]);
 
   const fetchItem = async () => {
-    const data = await fetch('http://localhost:3000/api/reviews');
+    const data = await fetch('/api/reviews');
     const jsonData = await data.json();
-
-    console.log(jsonData);
     setReviews(jsonData);
   };
   useEffect(() => {
     fetchItem();
   }, []);
+
   const reviewSpecific = reviews.filter((review) => review.meal_id === id);
 
   return (

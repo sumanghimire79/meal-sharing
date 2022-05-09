@@ -7,7 +7,7 @@ export const ReservationSpecific = ({ match }) => {
   const [reservations, setReservations] = useState([]);
 
   const fetchReservations = async () => {
-    const data = await fetch('http://localhost:3000/api/reservations');
+    const data = await fetch('/api/reservations');
     const jsonData = await data.json();
     setReservations(jsonData);
   };
@@ -56,7 +56,6 @@ export const ReservationSpecific = ({ match }) => {
                   title="click to view the specific meal for this reservation "
                 >
                   <h3>Number of Guests: {reservation.number_of_guests}</h3>
-                  {/* <p>Created Date: {new Date().toString()}</p> */}
                   <p>Created Date: {reservation.created_date.slice(0, 10)}</p>
                   <p>Phone: {Number(reservation.contact_phonenumber)}</p>
                   <p> Contact Name: {reservation.contact_name}</p>

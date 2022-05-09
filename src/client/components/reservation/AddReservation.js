@@ -17,9 +17,7 @@ export const AddReservation = () => {
   const [isDone, setIsDone] = useState(false);
 
   const fetchAvailableReservations = async () => {
-    const data = await fetch(
-      'http://localhost:3000/api/meals?availableReservations=true',
-    );
+    const data = await fetch('/api/meals?availableReservations=true');
     const jsonData = await data.json();
     setAvailableReservations(jsonData);
   };
@@ -41,7 +39,7 @@ export const AddReservation = () => {
     console.log(numberOfGuests);
     try {
       setIsDone(true);
-      let res = await fetch('http://localhost:3000/api/reservations', {
+      let res = await fetch('/api/reservations', {
         method: 'POST',
         headers: { 'Content-Type': 'Application/json' },
         body: JSON.stringify(reservationPost),

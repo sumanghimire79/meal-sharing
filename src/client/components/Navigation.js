@@ -5,9 +5,6 @@ export function Navigation() {
   return (
     <nav>
       <h3>logo</h3>
-      <section>
-        {/* <img src="./assets/images/hyf.png" alt="Logo" /> */}
-      </section>
       <ul>
         <Link to={'/'}>
           <li>Home</li>
@@ -18,7 +15,6 @@ export function Navigation() {
         <Link to={'/meals'}>
           <li>Menu</li>
         </Link>
-
         <Link to={'/reservations'}>
           <li>Reservations</li>
         </Link>

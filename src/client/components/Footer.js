@@ -6,7 +6,8 @@ export function Footer() {
     <footer>
       <p>
         <strong>Suman Ghimire </strong> ,<span> </span>
-        <a href="mailto:suman@hyf.dk">suman@hyf.dk</a>
+        <a href="mailto:sumanghimire79@yahoo.com">sumanghimire79@yahoo.com</a> ©
+        HYF, Denmark
       </p>
     </footer>
   );

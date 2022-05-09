@@ -1,4 +1,4 @@
-import React, { useEffect, useState, createContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Stars from 'react-stars-display';
 
@@ -6,7 +6,7 @@ export const Reviews = () => {
   const [reviews, setReviews] = useState([]);
 
   const fetchItem = async () => {
-    const data = await fetch('http://localhost:3000/api/reviews');
+    const data = await fetch('/api/reviews');
     const jsonData = await data.json();
     console.log(jsonData);
     setReviews(jsonData);
@@ -40,7 +40,6 @@ export const Reviews = () => {
                     {review.title}
                   </h1>
                   <p>{review.description} </p>
-                  {/* <p> Stars: {review.stars} </p> */}
                   <Stars stars={review.stars} size={30} />
                   <p> Meal: {review.meal_id} </p>
                   <p> Review Date: {review.created_date.slice(0, 10)} </p>

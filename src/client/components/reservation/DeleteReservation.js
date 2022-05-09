@@ -9,12 +9,9 @@ export const DeleteReservation = () => {
   const [deleteNotDEleteMessage, setDeleteNotDEleteMessage] = useState('');
 
   const handleClickdeleteReservationbyID = async (ID) => {
-    const deleteReservationbyID = await fetch(
-      `http://localhost:3000/api/reservations/${ID}`,
-      {
-        method: 'DELETE',
-      },
-    );
+    const deleteReservationbyID = await fetch(`/api/reservations/${ID}`, {
+      method: 'DELETE',
+    });
 
     if (deleteReservationbyID.status === 200) {
       alert(`Reservation ${ID} deleted successfully`);

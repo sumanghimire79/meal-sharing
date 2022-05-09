@@ -30,7 +30,7 @@ export const MealSpecific = () => {
 
     try {
       setIsDone(true);
-      let res = await fetch('http://localhost:3000/api/reservations', {
+      let res = await fetch('/api/reservations', {
         method: 'POST',
         headers: { 'Content-Type': 'Application/json' },
         body: JSON.stringify(reservationPost),
@@ -51,13 +51,13 @@ export const MealSpecific = () => {
   };
 
   const getMealWithId = async () => {
-    const data = await fetch(`http://localhost:3000/api/meals/${id}`);
+    const data = await fetch(`api/meals/${id}`);
     const jsonData = await data.json();
     setMeals(jsonData);
   };
 
   const getReservations = async () => {
-    const data = await fetch(`http://localhost:3000/api/reservations`);
+    const data = await fetch(`/api/reservations`);
     const jsonData = await data.json();
     setReservations(jsonData);
   };

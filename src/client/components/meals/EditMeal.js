@@ -22,7 +22,7 @@ export const EditMeal = () => {
     today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
   const fetchMealsById = async () => {
-    const data = await fetch(`http://localhost:3000/api/meals/${ID}`);
+    const data = await fetch(`api/meals/${ID}`);
     const jsonData = await data.json();
     const result = jsonData.map((editMeal) => {
       return (
@@ -33,7 +33,6 @@ export const EditMeal = () => {
           {setLocation(editMeal.location)}
           {setWhen(editMeal.when.slice(0, 10))}
           {setMaxReservation(editMeal.max_reservations)}
-          {/* {setCreatedDate(editMeal.created_date.split('T')[0])} */}
           {setCreatedDate(editMeal.created_date.slice(0, 10))}
           {setPrice(editMeal.price)}
         </div>
@@ -60,10 +59,7 @@ export const EditMeal = () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(putMealData),
     };
-    const putReviewById = await fetch(
-      `http://localhost:3000/api/meals/${ID}`,
-      putMealOptions,
-    );
+    const putReviewById = await fetch(`api/meals/${ID}`, putMealOptions);
     const jsonData = await putReviewById.json();
 
     if (putReviewById.ok) {
@@ -78,7 +74,6 @@ export const EditMeal = () => {
       <h1>Edit Meal</h1>
 
       {
-        // <form onSubmit={putReview}>
         <SubmitFormFancyCSS>
           <label> Meal ID </label>
           <input
@@ -159,7 +154,6 @@ export const EditMeal = () => {
             )}
           </div>
         </SubmitFormFancyCSS>
-        // </form>
       }
     </div>
   );
