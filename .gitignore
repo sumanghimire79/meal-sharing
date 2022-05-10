@@ -31,6 +31,7 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
+.env_forlocahost
 
 # add gitignore for .vscode and .vscode/settings.json
 .vscode 

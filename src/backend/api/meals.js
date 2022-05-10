@@ -16,43 +16,35 @@ const mealColumns = new Set([
 ]);
 
 function checkValidData(data) {
-  try {
-    let validData = {};
-    for (const key in data) {
-      // checking if the mealColumns has the key
-      if (mealColumns.has(key)) {
-        validData[key] = data[key];
-      }
+  let validData = {};
+  for (const key in data) {
+    // checking if the mealColumns has the key
+    if (mealColumns.has(key)) {
+      validData[key] = data[key];
     }
-    if ('limit' in validData) {
-      if (typeof validData.limit !== 'number') {
-        throw new Error();
-      }
-    }
-    if ('price' in validData) {
-      if (typeof validData.price !== 'number') {
-        throw new Error();
-      }
-    }
-    if ('max_reservation' in validData) {
-      if (typeof validData.max_reservation !== 'number') {
-        throw new Error();
-      }
-    }
-    if ('when' in validData) {
-      const parsedDate = new Date(validData.when);
-      if (isNaN(parsedDate)) {
-        throw new Error();
-      }
-    }
-    return validData;
-  } catch (error) {
-    console.log(error);
-    response.status(500).json({
-      status: 'failed',
-      message: `internal server error in checkValidData ${error}`,
-    });
   }
+  if ('limit' in validData) {
+    if (typeof validData.limit !== 'number') {
+      throw new Error('limit was not a number');
+    }
+  }
+  if ('price' in validData) {
+    if (typeof validData.price !== 'number') {
+      throw new Error('price was not a number');
+    }
+  }
+  if ('max_reservations' in validData) {
+    if (typeof validData.max_reservations !== 'number') {
+      throw new Error('max validation was not a number');
+    }
+  }
+  if ('when' in validData) {
+    const parsedDate = new Date(validData.when);
+    if (isNaN(parsedDate)) {
+      throw new Error(' date is not valid in when field');
+    }
+  }
+  return validData;
 }
 
 // Meals based on query
@@ -90,6 +82,42 @@ router.get('/', async (request, response) => {
     const createdAfter = new Date(query.createdAfter).getTime();
     meals = meals.where('meal.created_date', '<', createdAfter);
   }
+
+  // if ('availableReservations' in query) {
+  //   meals = meals
+  //     .join('reservation', 'meal.id', '=', 'reservation.meal_id')
+  //     .select(
+  //       'meal.id',
+  //       'title',
+  //       'max_reservations',
+  //       knex.raw('SUM(number_of_guests) AS total_guests'),
+  //       knex.raw(
+  //         '(max_reservations-SUM(number_of_guests)) AS "Available_Reservation"',
+  //       ),
+  //     )
+  //     .where('max_reservations', '>', 'number_of_guests')
+  //     .groupBy('meal_id')
+  //     .having(knex.raw('(max_reservations-SUM(number_of_guests)) > 0'));
+  // }
+
+  if ('popularMeal' in query) {
+    meals = meals
+      .join('review', 'meal.id', '=', 'review.meal_id')
+      .join('reservation', 'meal.id', '=', 'reservation.meal_id')
+      .select(
+        'meal.id',
+        'meal.title',
+        'location',
+        'max_reservations',
+        // 'stars',
+        'price',
+      )
+      .where('review.stars', '>', '1')
+      .groupBy('reservation.meal_id')
+      .having(knex.raw('(max_reservations-SUM(number_of_guests))>0'))
+      .limit(6);
+  }
+
   if ('availableReservations' in query) {
     meals = meals
       .join('reservation', 'meal.id', '=', 'reservation.meal_id')
@@ -99,12 +127,12 @@ router.get('/', async (request, response) => {
         'max_reservations',
         knex.raw('SUM(number_of_guests) AS total_guests'),
         knex.raw(
-          '(max_reservations-SUM(number_of_guests)) AS "Available Reservation"',
+          '(max_reservations-SUM(number_of_guests)) AS "Available_Reservation"',
         ),
       )
       .where('max_reservations', '>', 'number_of_guests')
       .groupBy('meal_id')
-      .having(knex.raw('(max_reservations-SUM(number_of_guests)) > 0'));
+      .having(knex.raw('(max_reservations-SUM(number_of_guests))>0'));
   }
 
   try {
@@ -180,7 +208,6 @@ router.get('/:id', async (request, response) => {
 router.put('/:id', async (request, response) => {
   try {
     const validData = checkValidData(request.body);
-    const checkedId = await knex('meal').where({ id: request.params.id });
     if (Object.keys(validData).length === 0) {
       return response.status(400).json({
         status: 'Failed',
@@ -191,6 +218,7 @@ router.put('/:id', async (request, response) => {
         },
       });
     }
+    const checkedId = await knex('meal').where({ id: request.params.id });
 
     if (checkedId.length === 0) {
       return response.status(404).json({
@@ -209,6 +237,7 @@ router.put('/:id', async (request, response) => {
       updated: mealUpdateByID,
     });
   } catch (error) {
+    console.log(error);
     response.status(500).json({
       status: 'failed',
       message: `internal server error  PUT api/meals/:id ${error}`,
