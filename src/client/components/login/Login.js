@@ -1,86 +1,126 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState, useEffect } from 'react';
+import { SubmitFormFancyCSS } from '../SubmitFormFancyCSS';
+import { Link, useHistory } from 'react-router-dom';
 
-import './styleLogin.css';
-
-export function Login() {
+export const Login = () => {
+  const history = useHistory();
   // React States
+  const [role, setRole] = useState('');
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [userFetched, setUserFetched] = useState([]);
+  const [user, setUSer] = useState({
+    email: '',
+    password: '',
+  });
 
-  // User Login info
-  const database = [
-    {
-      username: 'user1',
-      password: 'pass1',
-    },
-    {
-      username: 'user2',
-      password: 'pass2',
-    },
-  ];
-
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUSer({ ...user, [name]: value });
+  };
   const errors = {
-    uname: 'invalid username',
-    pass: 'invalid password',
+    email: 'invalid email',
+    password: 'invalid password',
   };
-
-  const handleSubmit = (event) => {
-    //Prevent page reload
-    event.preventDefault();
-
-    var { uname, pass } = document.forms[0];
-
-    // Find user login info
-    const userData = database.find((user) => user.username === uname.value);
-
-    // Compare user info
-    if (userData) {
-      if (userData.password !== pass.value) {
-        // Invalid password
-        setErrorMessages({ name: 'pass', message: errors.pass });
-      } else {
-        setIsSubmitted(true);
-      }
-    } else {
-      // Username not found
-      setErrorMessages({ name: 'uname', message: errors.uname });
-    }
-  };
-
   // Generate JSX code for error message
   const renderErrorMessage = (name) =>
     name === errorMessages.name && (
       <div className="error">{errorMessages.message}</div>
     );
 
-  // JSX code for login form
-  const renderForm = (
-    <div className="form">
-      <form onSubmit={handleSubmit}>
-        <div className="input-container">
-          <label>Username </label>
-          <input type="text" name="uname" required />
-          {renderErrorMessage('uname')}
-        </div>
-        <div className="input-container">
-          <label>Password </label>
-          <input type="password" name="pass" required />
-          {renderErrorMessage('pass')}
-        </div>
-        <div className="button-container">
-          <input type="submit" />
-        </div>
-      </form>
-    </div>
-  );
+  const fetchItem = async () => {
+    const data = await fetch('http://localhost:3000/api/login');
+    const jsonData = await data.json();
+    console.log(jsonData);
+    setUserFetched(jsonData);
+    // setRole(jsonData[0].role);
+  };
 
-  return (
-    <div className="app">
-      <div className="login-form">
-        <div className="title">Sign In</div>
-        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+  // const loginCheck = async () => {
+  //   const data = await fetch('http://localhost:3000/api/login/login');
+  //   const jsonData = await data.json();
+  //   if(jsonData.loggedIn){
+  //     setRole(jsonData[0].role);
+  //   }
+  // };
+
+  useEffect(() => {
+    fetchItem();
+    // loginCheck();
+  }, []);
+
+  const handleLogin = (e) => {
+    //Prevent page reload
+    e.preventDefault();
+
+    // var { email, password } = document.forms[0];
+
+    // Find user login info
+
+    // const userData = database.find((userd) => userd.email === user.email);
+    const userData = userFetched.find(
+      (userd) => userd.user_email === user.email,
+    );
+    console.log(userData);
+    // Compare user info
+    if (userData) {
+      if (userData.user_password !== user.password) {
+        // Invalid password
+        setErrorMessages({ name: 'password', message: errors.password });
+      } else {
+        setIsSubmitted(true);
+      }
+    } else {
+      // Username not found
+      setErrorMessages({ name: 'email', message: errors.email });
+    }
+  };
+
+  const renderFormLogin = (
+    <div>
+      <input
+        type="text"
+        name="email"
+        value={user.email}
+        placeholder="type your email"
+        onChange={handleChange}
+        required
+      />
+      {renderErrorMessage('email')}
+      <input
+        type="password"
+        name="password"
+        value={user.password}
+        placeholder="type your password"
+        onChange={handleChange}
+        required
+      />
+      {renderErrorMessage('password')}
+      <div className="login-button">
+        <button onClick={handleLogin}> Login </button>
+        <Link to="/register">
+          <button>Register</button>
+        </Link>
       </div>
     </div>
   );
-}
+  return (
+    <SubmitFormFancyCSS>
+      <div>
+        {console.log(user)}
+
+        <h1>Login</h1>
+        {isSubmitted ? (
+          <div>
+            {/* <>login success !</> <br></br> */}
+            {alert(` login success ! you role is a : ${role}`)}
+            {/* <>{` you role is a : ${role}`}</> */}
+            {history.push('/')}
+          </div>
+        ) : (
+          renderFormLogin
+        )}
+      </div>
+    </SubmitFormFancyCSS>
+  );
+};

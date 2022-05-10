@@ -10,8 +10,9 @@ nav{
   min-height: 10vh;
   background-color: rgb(72, 70, 82);
   color: white;
-  /* width: 100%; */
+ 
   margin: 2px auto;
+  padding: 0 1rem;
 }
 
 
@@ -68,12 +69,20 @@ a:visited{
   width: 90%;
   
 }
+.popularmeals{
+  background-color: rgb(81, 71, 71);
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  flex-wrap: wrap;
+}
 
 .div-3{
   display: flex;
   width: 90%;
   margin : 5px auto;
-}
+gap: 1rem;
+} 
 .div-3 > div{  
   width: 33.33%;
   border: 1px solid gray;
@@ -189,9 +198,19 @@ button:hover {
   margin: 1rem auto;
   gap: 0.5rem;
   color: white;
+  padding: 10%;
 
 }
-
+/* .submit-form-css select{
+background-color: red;
+width: 100%;
+} */
+.login-button{
+  display: flex;
+ margin: 0.5em auto;
+ gap: 1em;
+ justify-content: center;
+}
 
 
 /* Contact Us*/
@@ -267,4 +286,64 @@ footer a{color: darkgoldenrod;}
     width: 100%;
     height: 50%;
   }
+  .submit-form-css{
+    background-color: rgb(60, 49, 49);
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 1rem auto;
+    gap: 0.5rem;
+    color: white;
+    padding: 7.4%;
+  
+  }
+  nav ul li{
+    padding: 1rem 0.2rem;
+    
+   }
+nav{
+  padding: 0 0.2rem;
+}
+
+ 
+}
+
+@media only screen and (max-width: 400px) {
+  nav {
+    display: flex;
+    justify-content: space-between;
+    min-height: 10vh;
+    background-color: rgb(68, 66, 74);
+    color: white;
+    width: 90%;
+    margin: 2px auto;
+  
+    
+  }
+  nav ul {
+    font-size: 0.9rem;
+    display: flex;
+    list-style: none;
+    flex-direction: column;
+    color:white;
+    width: fit-content;
+    margin: 0 auto;
+  
+  }
+  .submit-form-css{
+    background-color: rgb(60, 49, 49);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 1rem auto;
+    gap: 0.5rem;
+    color: white;
+    padding: 10%;
+  
+  }
+  footer{
+    width: 90%;
+    margin: 0 auto;
+  }
+
 }

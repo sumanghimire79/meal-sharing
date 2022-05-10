@@ -29,6 +29,7 @@ import { Footer } from './components/Footer';
 
 import { NotFound } from './components/NotFound';
 import { Login } from './components/login/Login';
+import { Register } from './components/login/Register';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Navigation />
         <Switch>
           <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
           <Route path="/about" component={About} />
 
           <Route exact path="/meals/:id" component={MealSpecific} />

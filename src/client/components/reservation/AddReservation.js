@@ -70,7 +70,7 @@ export const AddReservation = () => {
       {
         <h1>
           All {availableReservations.length} meals currently available for
-          reservations{' '}
+          reservations
         </h1>
       }
       <div className="display-container">
