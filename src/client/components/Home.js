@@ -7,20 +7,18 @@ export function Home() {
   const fetchItem = async () => {
     const data = await fetch('/api/meals?popularMeal');
     const jsonData = await data.json();
-    console.log(jsonData);
     setPopularMeals(jsonData);
   };
 
   useEffect(() => {
     fetchItem();
-  }, []);
+  }, [fetchItem]);
 
   const popular = popularMeals.map((popularMeal, index) => {
     return (
       <div key={index} className="popularmeals">
         <Link to={`/meals/${popularMeal.id}`}>
           <h3>{popularMeal.title}</h3>
-
           {popularMeal.title.includes('pizza') && (
             <img
               className="bestItem"
@@ -42,21 +40,22 @@ export function Home() {
               alt="burger"
             />
           ) : null}
+
+          <p>
+            <strong> {popularMeal.location} </strong>
+          </p>
+          <p>
+            Max capacity:
+            <strong> {popularMeal.max_reservations} </strong>
+          </p>
+          <p>
+            Price :<strong> {popularMeal.price} </strong>
+          </p>
         </Link>
-        <p>
-          <strong> {popularMeal.location} </strong>
-        </p>
-        <p>
-          Max capacity:
-          <strong> {popularMeal.max_reservations} </strong>
-        </p>
-        <p>
-          Price :<strong> {popularMeal.price} </strong>
-        </p>
       </div>
     );
   });
-  console.log(popularMeals);
+
   return (
     <div className="homeSection">
       <div className="banner"></div>
