@@ -7,20 +7,18 @@ export function Home() {
   const fetchItem = async () => {
     const data = await fetch('/api/meals?popularMeal=true');
     const jsonData = await data.json();
-    console.log(jsonData);
     setPopularMeals(jsonData);
   };
 
   useEffect(() => {
     fetchItem();
-  }, []);
+  }, [fetchItem]);
 
   const popular = popularMeals.map((popularMeal, index) => {
     return (
       <div key={index} className="popularmeals">
         <Link to={`/meals/${popularMeal.id}`}>
           <h3>{popularMeal.title}</h3>
-
           {popularMeal.title.includes('pizza') && (
             <img
               className="bestItem"

@@ -20,7 +20,8 @@ router.get('/', async (request, response) => {
   try {
     const allEmployee = await knex('login'); //.select('user_name');
 
-    // const allusers = allEmployee.map((user) => user);
+    const allusers = allEmployee;
+    // .map((user) => user)
     // .filter((userName) => userName === request.query);
 
     // console.log(allusers);
