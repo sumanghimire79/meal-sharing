@@ -5,14 +5,11 @@ import { Link, useHistory } from 'react-router-dom';
 export const Login = () => {
   const history = useHistory();
   // React States
-  const [role, setRole] = useState('');
+
   const [errorMessages, setErrorMessages] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [userFetched, setUserFetched] = useState([]);
-  const [user, setUSer] = useState({
-    email: '',
-    password: '',
-  });
+  const [user, setUSer] = useState({ email: '', password: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,34 +30,21 @@ export const Login = () => {
     const jsonData = await data.json();
     console.log(jsonData);
     setUserFetched(jsonData);
-    // setRole(jsonData[0].role);
   };
-
-  // const loginCheck = async () => {
-  //   const data = await fetch('http://localhost:3000/api/login/login');
-  //   const jsonData = await data.json();
-  //   if(jsonData.loggedIn){
-  //     setRole(jsonData[0].role);
-  //   }
-  // };
 
   useEffect(() => {
     fetchItem();
-    // loginCheck();
   }, []);
 
   const handleLogin = (e) => {
     //Prevent page reload
     e.preventDefault();
 
-    // var { email, password } = document.forms[0];
-
     // Find user login info
-
-    // const userData = database.find((userd) => userd.email === user.email);
     const userData = userFetched.find(
       (userd) => userd.user_email === user.email,
     );
+
     console.log(userData);
     // Compare user info
     if (userData) {
@@ -112,9 +96,7 @@ export const Login = () => {
         <h1>Login</h1>
         {isSubmitted ? (
           <div>
-            {/* <>login success !</> <br></br> */}
-            {alert(` login success ! you role is a : ${role}`)}
-            {/* <>{` you role is a : ${role}`}</> */}
+            {alert(` login success !`)}
             {history.push('/')}
           </div>
         ) : (
