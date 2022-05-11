@@ -5,7 +5,7 @@ export function Home() {
   const [popularMeals, setPopularMeals] = useState([]);
 
   const fetchItem = async () => {
-    const data = await fetch('/api/meals?popularMeal');
+    const data = await fetch('/api/meals?popularMeal=true');
     const jsonData = await data.json();
     setPopularMeals(jsonData);
   };
@@ -43,6 +43,7 @@ export function Home() {
               alt="Pita Bread"
             />
           )}
+
           {popularMeal.title.toLowerCase().includes('sandwitch') && (
             <img
               className="bestItem"
@@ -54,7 +55,6 @@ export function Home() {
         <p>
           <strong> {popularMeal.location} </strong>
         </p>
-
         <p>
           Price :<strong> {popularMeal.price} </strong>
         </p>
