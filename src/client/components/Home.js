@@ -20,15 +20,6 @@ export function Home() {
         <Link to={`/meals/${popularMeal.id}`}>
           <h3>{popularMeal.title}</h3>
 
-          {!popularMeal.title
-            .toLowerCase()
-            .includes('sandwitch' || 'pita' || 'pizza') && (
-            <img
-              className="bestItem"
-              src="https://gastrofun.dk/wp-content/uploads/2020/04/Hjemmelavet-Burger-Shack-Burger-1.jpg"
-              alt="bestItem"
-            />
-          )}
           {popularMeal.title.toLowerCase().includes('pizza') && (
             <img
               className="bestItem"
@@ -49,6 +40,15 @@ export function Home() {
               className="bestItem"
               src="https://www.bing.com/th?id=OIP.8RJptF5WHZYS6JYr9jXS1QHaFH&w=300&h=207&c=8&rs=1&qlt=90&o=6&dpr=1.5&pid=3.1&rm=2"
               alt="sandwitch"
+            />
+          )}
+          {!popularMeal.title
+            .toLowerCase()
+            .includes('sandwitch' || 'pita' || 'pizza') && (
+            <img
+              className="bestItem"
+              src="https://gastrofun.dk/wp-content/uploads/2020/04/Hjemmelavet-Burger-Shack-Burger-1.jpg"
+              alt="bestItem"
             />
           )}
         </Link>
