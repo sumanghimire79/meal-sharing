@@ -103,18 +103,20 @@ router.get('/', async (request, response) => {
   if ('popularMeal' in query) {
     meals = meals
       .join('review', 'meal.id', '=', 'review.meal_id')
-      .join('reservation', 'meal.id', '=', 'reservation.meal_id')
+      // .join('reservation', 'meal.id', '=', 'reservation.meal_id')
       .select(
         'meal.id',
         'meal.title',
         'location',
-        'max_reservations',
+        // 'max_reservations',
+        // 'number_of_guests',
+
         // 'stars',
         'price',
       )
-      .where('review.stars', '>', '1')
-      .groupBy('reservation.meal_id')
-      .having(knex.raw('(max_reservations-SUM(number_of_guests))>0'))
+      .where('review.stars', '>', '4')
+      .groupBy('meal_id')
+      // .having(knex.raw('(max_reservations-SUM(number_of_guests))>0'))
       .limit(6);
   }
 
