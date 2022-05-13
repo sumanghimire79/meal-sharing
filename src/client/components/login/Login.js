@@ -26,7 +26,7 @@ export const Login = () => {
     );
 
   const fetchItem = async () => {
-    const data = await fetch('http://localhost:3000/api/login');
+    const data = await fetch('/api/login');
     const jsonData = await data.json();
     console.log(jsonData);
     setUserFetched(jsonData);

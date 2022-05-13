@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../mealSharing.css';
 
-
 export const Meals = () => {
   const [meals, setMeals] = useState([]);
   const [data, setData] = useState([]);
@@ -31,7 +30,6 @@ export const Meals = () => {
       </section>
     );
   });
-
 
   const excludeSearch = [
     'id',
@@ -66,8 +64,16 @@ export const Meals = () => {
 
   return (
     <div>
-      <h1> All available {correctData.length} meals</h1>
+      <div className="reserv_review">
+        <Link exact to={'/reservations'}>
+          {<button> Reservations</button>}
+        </Link>
+        <Link exact to={'/reviews'}>
+          {<button> Reviews</button>}
+        </Link>
+      </div>
 
+      <h3> All available {correctData.length} meals</h3>
       <Link exact to={'/addMeal'}>
         {<button> Add Meal</button>}
       </Link>
@@ -82,7 +88,7 @@ export const Meals = () => {
           placeholder="search meal ..."
         />
       </form>
-      <hr></hr>
+
       <section className="display-container">
         {isData === true ? <span>No data found</span> : showData}
       </section>

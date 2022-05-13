@@ -19,7 +19,6 @@ export function Home() {
       <div key={index} className="popularmeals">
         <Link to={`/meals/${popularMeal.id}`}>
           <h3>{popularMeal.title}</h3>
-
           {(() => {
             if (popularMeal.title.toLowerCase().includes('pizza')) {
               return (

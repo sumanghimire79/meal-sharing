@@ -4,7 +4,14 @@ import { Link } from 'react-router-dom';
 export function Navigation() {
   return (
     <nav>
-      <h3>logo</h3>
+      <div className="logo-div">
+        <img
+          className="logo"
+          src="https://static.vecteezy.com/system/resources/previews/000/095/259/original/restaurant-menu-vector.jpg"
+          alt="logo"
+        />
+      </div>
+
       <ul>
         <Link to={'/'}>
           <li>Home</li>
@@ -15,12 +22,7 @@ export function Navigation() {
         <Link to={'/meals'}>
           <li>Menu</li>
         </Link>
-        <Link to={'/reservations'}>
-          <li>Reservations</li>
-        </Link>
-        <Link to={'/reviews'}>
-          <li>Reviews</li>
-        </Link>
+
         <Link to={'/contact'}>
           <li>Contact</li>
         </Link>

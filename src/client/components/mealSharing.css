@@ -13,8 +13,18 @@ nav{
  
   margin: 2px auto;
   padding: 0 1rem;
+  border-radius: 0.3rem;
 }
-
+.logo-div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo{
+  height: 3rem;
+  width: 5rem;
+  border-radius: 5rem;
+}
 
 nav ul {
   font-size: 0.9rem;
@@ -29,10 +39,18 @@ nav ul li{
  
 }
 
-a:visited{
-  color: red;
+
+a{
+  color: rgb(246, 244, 244);
+}
+a:hover{
+  color: rgb(174, 137, 137);
+}
+.display-item > a{
+  color: rgb(93, 88, 88);
 }
 .display-item > a:visited{
+
   color: rgb(23, 22, 22);
 }
 
@@ -47,6 +65,7 @@ a:visited{
  justify-content: center;
  align-items: center;
  margin : 5px auto;
+ border-radius: 0.3rem;
 }
 .about-banner {
   background-image: url('https://cdn.vox-cdn.com/thumbor/WCDW_g-Tj3D9AOYBMwfNP-By7tc=/0x0:5713x3540/1200x800/filters:focal(2604x1523:3518x2437)/cdn.vox-cdn.com/uploads/chorus_image/image/70699951/landscape_ensemble_copy.0.jpg');
@@ -56,11 +75,13 @@ a:visited{
   background-position: center;
   object-fit: cover;
   margin : 5px auto;
+  border-radius: 0.3rem;
  }
  .about{
     background-color: rgb(126, 118, 118);
    width:  90%;
    margin : 5px auto;
+   border-radius: 0.3rem;
  }
 .div-center{
   border: 1px solid gray;
@@ -68,6 +89,15 @@ a:visited{
   padding: 10px;
   width: 90%;
   
+}
+.reserv_review{
+  display: flex;
+  justify-content: center;
+background-color: rgb(125, 123, 123);
+height: 3rem;
+align-items: center;
+gap: 3rem;
+
 }
 .popularmeals{
   background-color: rgb(81, 71, 71);
@@ -120,7 +150,7 @@ justify-content: center;
   background-color: whitesmoke;
   flex-wrap: wrap;
   gap: 0.5rem;
-  border: 1px solid gray;
+  border: 1px solid rgb(125, 123, 123);
   border-radius: 10px;
   margin: 5px;
   justify-content: center;
@@ -260,6 +290,7 @@ footer{
   background-color: rgb(72, 70, 82);
   color: aliceblue;
   width: 100%;
+  border-radius: 0.3rem;
 }
 footer a{color: darkgoldenrod;}
 
@@ -269,9 +300,9 @@ footer a{color: darkgoldenrod;}
     background-color: lightblue;
     
   }
-  .display-container{background-color: #36a936;}
+  .display-container{background-color: #000000;}
   .display-item{
-    background-color: rgb(211, 164, 164);
+    background-color: rgb(119, 115, 115);
     width: 100%;
   }
   .div-3{
